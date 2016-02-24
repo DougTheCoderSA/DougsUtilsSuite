@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CodeStencil")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("CodeStencil 2016")]
+[assembly: AssemblyDescription("Create code from templates, using database objects and data to generate.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Douglas Crole")]
 [assembly: AssemblyProduct("CodeStencil")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright ©  2016 Douglas Crole")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
