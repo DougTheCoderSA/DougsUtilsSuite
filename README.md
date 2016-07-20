@@ -9,6 +9,10 @@ This is a rather random assortment of utilities that fall into 2 main categories
 
 Right now there's not much to look at.
 
+Quick note: Projects with names that begin with zz are experimental, used to test concepts before they are incorporated into
+a proper project. They can be useful to refer to, since live code generally has much more error checking and handling
+which can obfuscate the code which is acheiving something relatively simple.
+
 Probably the most usable utility is CodeStencil, which lets you connect to a SQL server, 
 select the database, table, and columns, and then generate code from a template that can repeat
 for each selected column.
