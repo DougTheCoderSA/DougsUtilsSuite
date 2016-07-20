@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilityClasses", "..\..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStencil", "CodeStencil\CodeStencil.csproj", "{AC969A85-FBD7-4687-8045-95ABFA219367}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapshotCompare", "SnapshotCompare\SnapshotCompare.csproj", "{0D783D4E-B21A-41BF-8A6B-B6D829EFD7EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{AC969A85-FBD7-4687-8045-95ABFA219367}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC969A85-FBD7-4687-8045-95ABFA219367}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC969A85-FBD7-4687-8045-95ABFA219367}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D783D4E-B21A-41BF-8A6B-B6D829EFD7EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D783D4E-B21A-41BF-8A6B-B6D829EFD7EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D783D4E-B21A-41BF-8A6B-B6D829EFD7EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D783D4E-B21A-41BF-8A6B-B6D829EFD7EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
