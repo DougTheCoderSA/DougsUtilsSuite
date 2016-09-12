@@ -317,7 +317,7 @@ namespace CodeStencil
 
             // Set up a command with the given query and associate
             // this with the current connection.
-            using (SqlCommand cmd = new SqlCommand("SELECT name, TYPE_NAME(system_type_id) AS type, max_length, precision, scale, is_nullable, is_identity from sys.columns WHERE object_id = OBJECT_ID('" + CurrentTableSchema + "." + CurrentTable + "') ORDER BY column_id", db))
+            using (SqlCommand cmd = new SqlCommand("SELECT name, TYPE_NAME(system_type_id) AS type, max_length, precision, scale, is_nullable, is_identity, OBJECT_DEFINITION(default_object_id) AS DefaultValue from sys.columns WHERE object_id = OBJECT_ID('" + CurrentTableSchema + "." + CurrentTable + "') ORDER BY column_id", db))
             {
                 using (IDataReader dr = cmd.ExecuteReader())
                 {
@@ -337,6 +337,14 @@ namespace CodeStencil
                         item.SubItems.Add(dr[4].ToString());
                         item.SubItems.Add(dr[5].ToString());
                         item.SubItems.Add(dr[6].ToString());
+                        if (dr[7] == null)
+                        {
+                            item.SubItems.Add("(NULL)");
+                        }
+                        else
+                        {
+                            item.SubItems.Add(dr[7].ToString());
+                        }
                         LVColumns.Items.Add(item);
                     }
                 }

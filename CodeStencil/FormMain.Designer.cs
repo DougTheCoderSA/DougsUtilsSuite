@@ -74,6 +74,7 @@
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.BtnColumnInvertSelection = new System.Windows.Forms.Button();
             this.BtnColumnSelectNone = new System.Windows.Forms.Button();
             this.BtnColumnSelectAll = new System.Windows.Forms.Button();
@@ -187,9 +188,9 @@
             this.groupBox1.Controls.Add(this.BtnDBSelectNone);
             this.groupBox1.Controls.Add(this.BtnDBSelectAll);
             this.groupBox1.Controls.Add(this.CLBDatabases);
-            this.groupBox1.Location = new System.Drawing.Point(6, 167);
+            this.groupBox1.Location = new System.Drawing.Point(6, 135);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(846, 365);
+            this.groupBox1.Size = new System.Drawing.Size(846, 397);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Databases to Use in Generate";
@@ -197,7 +198,7 @@
             // BtnDBInvertSelection
             // 
             this.BtnDBInvertSelection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnDBInvertSelection.Location = new System.Drawing.Point(231, 336);
+            this.BtnDBInvertSelection.Location = new System.Drawing.Point(231, 368);
             this.BtnDBInvertSelection.Name = "BtnDBInvertSelection";
             this.BtnDBInvertSelection.Size = new System.Drawing.Size(105, 23);
             this.BtnDBInvertSelection.TabIndex = 3;
@@ -208,7 +209,7 @@
             // BtnDBSelectNone
             // 
             this.BtnDBSelectNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnDBSelectNone.Location = new System.Drawing.Point(120, 336);
+            this.BtnDBSelectNone.Location = new System.Drawing.Point(120, 368);
             this.BtnDBSelectNone.Name = "BtnDBSelectNone";
             this.BtnDBSelectNone.Size = new System.Drawing.Size(105, 23);
             this.BtnDBSelectNone.TabIndex = 2;
@@ -219,7 +220,7 @@
             // BtnDBSelectAll
             // 
             this.BtnDBSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnDBSelectAll.Location = new System.Drawing.Point(9, 336);
+            this.BtnDBSelectAll.Location = new System.Drawing.Point(9, 368);
             this.BtnDBSelectAll.Name = "BtnDBSelectAll";
             this.BtnDBSelectAll.Size = new System.Drawing.Size(105, 23);
             this.BtnDBSelectAll.TabIndex = 1;
@@ -235,7 +236,7 @@
             this.CLBDatabases.FormattingEnabled = true;
             this.CLBDatabases.Location = new System.Drawing.Point(9, 19);
             this.CLBDatabases.Name = "CLBDatabases";
-            this.CLBDatabases.Size = new System.Drawing.Size(831, 304);
+            this.CLBDatabases.Size = new System.Drawing.Size(831, 334);
             this.CLBDatabases.TabIndex = 0;
             // 
             // GBServerDetails
@@ -243,8 +244,6 @@
             this.GBServerDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GBServerDetails.Controls.Add(this.PSQLServerConnStatus);
-            this.GBServerDetails.Controls.Add(this.label4);
-            this.GBServerDetails.Controls.Add(this.CBDatabase);
             this.GBServerDetails.Controls.Add(this.BtnSQLServerConnect);
             this.GBServerDetails.Controls.Add(this.label3);
             this.GBServerDetails.Controls.Add(this.TSQLPassword);
@@ -255,7 +254,7 @@
             this.GBServerDetails.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GBServerDetails.Location = new System.Drawing.Point(6, 6);
             this.GBServerDetails.Name = "GBServerDetails";
-            this.GBServerDetails.Size = new System.Drawing.Size(846, 155);
+            this.GBServerDetails.Size = new System.Drawing.Size(846, 123);
             this.GBServerDetails.TabIndex = 0;
             this.GBServerDetails.TabStop = false;
             this.GBServerDetails.Text = "SQL Server Details";
@@ -270,7 +269,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 125);
+            this.label4.Location = new System.Drawing.Point(6, 19);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(86, 13);
             this.label4.TabIndex = 8;
@@ -282,7 +281,7 @@
             this.CBDatabase.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.CBDatabase.Enabled = false;
             this.CBDatabase.FormattingEnabled = true;
-            this.CBDatabase.Location = new System.Drawing.Point(165, 122);
+            this.CBDatabase.Location = new System.Drawing.Point(98, 16);
             this.CBDatabase.Name = "CBDatabase";
             this.CBDatabase.Size = new System.Drawing.Size(363, 21);
             this.CBDatabase.TabIndex = 7;
@@ -349,8 +348,6 @@
             // 
             // TPTable
             // 
-            this.TPTable.Controls.Add(this.label8);
-            this.TPTable.Controls.Add(this.CBTable);
             this.TPTable.Controls.Add(this.groupBox2);
             this.TPTable.Location = new System.Drawing.Point(4, 22);
             this.TPTable.Name = "TPTable";
@@ -364,7 +361,7 @@
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(9, 514);
+            this.label8.Location = new System.Drawing.Point(6, 22);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(67, 13);
             this.label8.TabIndex = 2;
@@ -377,9 +374,9 @@
             this.CBTable.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.CBTable.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.CBTable.FormattingEnabled = true;
-            this.CBTable.Location = new System.Drawing.Point(82, 511);
+            this.CBTable.Location = new System.Drawing.Point(79, 19);
             this.CBTable.Name = "CBTable";
-            this.CBTable.Size = new System.Drawing.Size(770, 21);
+            this.CBTable.Size = new System.Drawing.Size(761, 21);
             this.CBTable.TabIndex = 1;
             this.CBTable.SelectedIndexChanged += new System.EventHandler(this.CBTable_SelectedIndexChanged);
             // 
@@ -388,6 +385,8 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.CBDatabase);
             this.groupBox2.Controls.Add(this.BtnTableInvertSelection);
             this.groupBox2.Controls.Add(this.BtnTableSelectNone);
             this.groupBox2.Controls.Add(this.BtnTableSelectAll);
@@ -438,9 +437,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.CLBTables.FormattingEnabled = true;
-            this.CLBTables.Location = new System.Drawing.Point(6, 19);
+            this.CLBTables.Location = new System.Drawing.Point(6, 49);
             this.CLBTables.Name = "CLBTables";
-            this.CLBTables.Size = new System.Drawing.Size(834, 439);
+            this.CLBTables.Size = new System.Drawing.Size(834, 409);
             this.CLBTables.TabIndex = 0;
             // 
             // TPColumn
@@ -458,6 +457,8 @@
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.label8);
+            this.groupBox3.Controls.Add(this.CBTable);
             this.groupBox3.Controls.Add(this.LVColumns);
             this.groupBox3.Controls.Add(this.BtnColumnInvertSelection);
             this.groupBox3.Controls.Add(this.BtnColumnSelectNone);
@@ -482,13 +483,14 @@
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader6,
-            this.columnHeader7});
+            this.columnHeader7,
+            this.columnHeader8});
             listViewItem1.StateImageIndex = 0;
             this.LVColumns.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1});
-            this.LVColumns.Location = new System.Drawing.Point(6, 19);
+            this.LVColumns.Location = new System.Drawing.Point(6, 46);
             this.LVColumns.Name = "LVColumns";
-            this.LVColumns.Size = new System.Drawing.Size(834, 469);
+            this.LVColumns.Size = new System.Drawing.Size(834, 442);
             this.LVColumns.TabIndex = 7;
             this.LVColumns.UseCompatibleStateImageBehavior = false;
             this.LVColumns.View = System.Windows.Forms.View.Details;
@@ -523,6 +525,10 @@
             // columnHeader7
             // 
             this.columnHeader7.Text = "Identity";
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Default";
             // 
             // BtnColumnInvertSelection
             // 
@@ -737,10 +743,11 @@
             this.GBServerDetails.ResumeLayout(false);
             this.GBServerDetails.PerformLayout();
             this.TPTable.ResumeLayout(false);
-            this.TPTable.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.TPColumn.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.TPGenerate.ResumeLayout(false);
             this.TPGenerate.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -814,6 +821,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
+        private System.Windows.Forms.ColumnHeader columnHeader8;
     }
 }
 

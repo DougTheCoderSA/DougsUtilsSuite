@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeStencil", "CodeStencil\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapshotCompare", "SnapshotCompare\SnapshotCompare.csproj", "{0D783D4E-B21A-41BF-8A6B-B6D829EFD7EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLPivot", "SQLPivot\SQLPivot.csproj", "{B268B1CE-AA5C-49CD-88BF-AE1FE798E359}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0D783D4E-B21A-41BF-8A6B-B6D829EFD7EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D783D4E-B21A-41BF-8A6B-B6D829EFD7EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D783D4E-B21A-41BF-8A6B-B6D829EFD7EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B268B1CE-AA5C-49CD-88BF-AE1FE798E359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B268B1CE-AA5C-49CD-88BF-AE1FE798E359}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B268B1CE-AA5C-49CD-88BF-AE1FE798E359}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B268B1CE-AA5C-49CD-88BF-AE1FE798E359}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
