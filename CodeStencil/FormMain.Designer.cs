@@ -47,8 +47,6 @@
             this.CLBDatabases = new System.Windows.Forms.CheckedListBox();
             this.GBServerDetails = new System.Windows.Forms.GroupBox();
             this.PSQLServerConnStatus = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.CBDatabase = new System.Windows.Forms.ComboBox();
             this.BtnSQLServerConnect = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.TSQLPassword = new System.Windows.Forms.TextBox();
@@ -57,15 +55,17 @@
             this.label1 = new System.Windows.Forms.Label();
             this.TSQLServerNameOrIP = new System.Windows.Forms.TextBox();
             this.TPTable = new System.Windows.Forms.TabPage();
-            this.label8 = new System.Windows.Forms.Label();
-            this.CBTable = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.CBDatabase = new System.Windows.Forms.ComboBox();
             this.BtnTableInvertSelection = new System.Windows.Forms.Button();
             this.BtnTableSelectNone = new System.Windows.Forms.Button();
             this.BtnTableSelectAll = new System.Windows.Forms.Button();
             this.CLBTables = new System.Windows.Forms.CheckedListBox();
             this.TPColumn = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.CBTable = new System.Windows.Forms.ComboBox();
             this.LVColumns = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -266,27 +266,6 @@
             this.PSQLServerConnStatus.Size = new System.Drawing.Size(25, 24);
             this.PSQLServerConnStatus.TabIndex = 9;
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 19);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(86, 13);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Select Database";
-            // 
-            // CBDatabase
-            // 
-            this.CBDatabase.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.CBDatabase.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CBDatabase.Enabled = false;
-            this.CBDatabase.FormattingEnabled = true;
-            this.CBDatabase.Location = new System.Drawing.Point(98, 16);
-            this.CBDatabase.Name = "CBDatabase";
-            this.CBDatabase.Size = new System.Drawing.Size(363, 21);
-            this.CBDatabase.TabIndex = 7;
-            this.CBDatabase.SelectedValueChanged += new System.EventHandler(this.CBDatabase_SelectedValueChanged);
-            // 
             // BtnSQLServerConnect
             // 
             this.BtnSQLServerConnect.Location = new System.Drawing.Point(165, 92);
@@ -357,29 +336,6 @@
             this.TPTable.Text = "Table";
             this.TPTable.UseVisualStyleBackColor = true;
             // 
-            // label8
-            // 
-            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 22);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(67, 13);
-            this.label8.TabIndex = 2;
-            this.label8.Text = "Select Table";
-            // 
-            // CBTable
-            // 
-            this.CBTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.CBTable.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.CBTable.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.CBTable.FormattingEnabled = true;
-            this.CBTable.Location = new System.Drawing.Point(79, 19);
-            this.CBTable.Name = "CBTable";
-            this.CBTable.Size = new System.Drawing.Size(761, 21);
-            this.CBTable.TabIndex = 1;
-            this.CBTable.SelectedIndexChanged += new System.EventHandler(this.CBTable_SelectedIndexChanged);
-            // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -397,6 +353,29 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tables to Use in Generate";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 19);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(86, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Select Database";
+            // 
+            // CBDatabase
+            // 
+            this.CBDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.CBDatabase.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.CBDatabase.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.CBDatabase.Enabled = false;
+            this.CBDatabase.FormattingEnabled = true;
+            this.CBDatabase.Location = new System.Drawing.Point(98, 16);
+            this.CBDatabase.Name = "CBDatabase";
+            this.CBDatabase.Size = new System.Drawing.Size(742, 21);
+            this.CBDatabase.TabIndex = 7;
+            this.CBDatabase.SelectedValueChanged += new System.EventHandler(this.CBDatabase_SelectedValueChanged);
             // 
             // BtnTableInvertSelection
             // 
@@ -469,6 +448,28 @@
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Columns to Use in Generate";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 22);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(67, 13);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "Select Table";
+            // 
+            // CBTable
+            // 
+            this.CBTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.CBTable.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.CBTable.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.CBTable.FormattingEnabled = true;
+            this.CBTable.Location = new System.Drawing.Point(79, 19);
+            this.CBTable.Name = "CBTable";
+            this.CBTable.Size = new System.Drawing.Size(761, 21);
+            this.CBTable.TabIndex = 1;
+            this.CBTable.SelectedIndexChanged += new System.EventHandler(this.CBTable_SelectedIndexChanged);
             // 
             // LVColumns
             // 
