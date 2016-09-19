@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppSettings.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,6 +83,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="applications-engineering.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\DataWork\Projects\UtilityClasses\UtilityClasses.csproj">
+      <Project>{47EEBEA3-69C0-4B02-BC82-33BFEB6F7132}</Project>
+      <Name>UtilityClasses</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

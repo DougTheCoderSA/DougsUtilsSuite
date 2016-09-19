@@ -16,6 +16,7 @@ namespace CodeStencil
 {
     public partial class FormMain : Form
     {
+        public static AppSettings Settings;
         public SqlConnection db;
         public string CurrentDatabase;
         public string CurrentTable;
@@ -42,6 +43,13 @@ namespace CodeStencil
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            // Load settings from ini file
+            Settings = AppSettings.Load();
+
+            TSQLServerNameOrIP.Text = Settings.SQLServerNameOrIP;
+            TSQLUserName.Text = Settings.SQLUserName;
+            TSQLPassword.Text = Settings.SQLPassword;
+            
             // Initialise string list with all replaceable macros
             CodeMacros = new List<string>();
             CodeMacros.Add(MacroDatabaseName);
@@ -120,7 +128,6 @@ namespace CodeStencil
                 sqlBuilder.IntegratedSecurity = true;
             }
 
-
             // Build the SqlConnection connection string.
             string providerString = sqlBuilder.ToString();
 
@@ -131,6 +138,7 @@ namespace CodeStencil
                 db.Open();
                 PSQLServerConnStatus.BackColor = Color.Green;
                 DebugLog("Connected to Server: " + TSQLServerNameOrIP.Text, true);
+                SaveConnectionInfo();
                 PopulateDatabasesList();
             }
             catch (Exception ex)
@@ -138,7 +146,14 @@ namespace CodeStencil
                 PSQLServerConnStatus.BackColor = Color.Red;
                 DebugLog("Error Connecting to Server: " + ex.Message, true);
             }
-
+        }
+ 
+        private void SaveConnectionInfo()
+        {
+            Settings.SQLServerNameOrIP = TSQLServerNameOrIP.Text;
+            Settings.SQLUserName = TSQLUserName.Text;
+            Settings.SQLPassword = TSQLPassword.Text;
+            Settings.Save();
         }
 
         public void PopulateDatabasesList()
