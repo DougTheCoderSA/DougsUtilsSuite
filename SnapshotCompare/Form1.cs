@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -197,13 +198,52 @@ namespace SnapshotCompare
             if (lv1.SelectedItems.Count > 0)
             {
                 ListViewItem item = lv1.SelectedItems[0];
-                
             }
         }
 
         private void LVStoredProcs1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SelectCorrespondingItem(LVStoredProcs1, LVStoredProcs2);
+        }
+ 
+        // Find name of currently selected item in ListView, select corresponding item in 2nd listview.
+        private void SelectCorrespondingItem(ListView currListView, ListView destListView)
+        {
+            if (currListView.SelectedItems.Count > 0)
+            {
+                ListViewItem SelectedItem = currListView.SelectedItems[0];
+                string ItemName = SelectedItem.SubItems[1].Text;
+                foreach (ListViewItem item in destListView.Items)
+                {
+                    string DestItemName = item.SubItems[1].Text;
+                    if (DestItemName.ToLowerInvariant() == ItemName.ToLowerInvariant())
+                    {
+                        // Found the item in the dest list view, unselect prev and select this item.
+                        foreach (ListViewItem selectedItem in destListView.SelectedItems)
+                        {
+                            selectedItem.Selected = false;
+                        }
+                        item.Selected = true;
+                        item.EnsureVisible();
+                    }
+                }
+            }
 
+            
+        }
+
+        private void BtnMergeProcs_Click(object sender, EventArgs e)
+        {
+            string WinMergePath = "C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe";
+            string LeftCompareFilePath = "\"C:\\DataPersonal\\Projects\\DougsUtilsSuite\\zzSnapshotDB\\bin\\Debug\\Output\\(local) Forecasting_Dev 2016-04-08 09_08_55\\SP_DataTransfer_Channel_Agg_Insert.sql\"";
+            string RightCompareFilePath = "\"C:\\DataPersonal\\Projects\\DougsUtilsSuite\\zzSnapshotDB\\bin\\Debug\\Output\\192.168.0.11 Forecasting_Dev 2016-04-08 09_10_24\\SP_DataTransfer_Channel_Agg_Insert.sql\"";
+            string CmdLineArguments = LeftCompareFilePath + " " + RightCompareFilePath;
+            Process.Start(WinMergePath, CmdLineArguments);
+        }
+
+        private void LVStoredProcs2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectCorrespondingItem(LVStoredProcs2, LVStoredProcs1);
         }
     }
 }

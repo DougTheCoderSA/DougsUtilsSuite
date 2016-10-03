@@ -48,12 +48,15 @@
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
             this.CBSnapshot2 = new System.Windows.Forms.ComboBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.BtnMergeProcs = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -115,7 +118,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.LVStoredProcs2);
             this.splitContainer1.Panel2.Controls.Add(this.label2);
             this.splitContainer1.Panel2.Controls.Add(this.CBSnapshot2);
-            this.splitContainer1.Size = new System.Drawing.Size(694, 403);
+            this.splitContainer1.Size = new System.Drawing.Size(694, 374);
             this.splitContainer1.SplitterDistance = 331;
             this.splitContainer1.TabIndex = 2;
             // 
@@ -135,7 +138,7 @@
             this.LVStoredProcs1.Location = new System.Drawing.Point(6, 30);
             this.LVStoredProcs1.MultiSelect = false;
             this.LVStoredProcs1.Name = "LVStoredProcs1";
-            this.LVStoredProcs1.Size = new System.Drawing.Size(322, 370);
+            this.LVStoredProcs1.Size = new System.Drawing.Size(322, 341);
             this.LVStoredProcs1.TabIndex = 2;
             this.LVStoredProcs1.UseCompatibleStateImageBehavior = false;
             this.LVStoredProcs1.View = System.Windows.Forms.View.Details;
@@ -194,10 +197,11 @@
             this.LVStoredProcs2.HideSelection = false;
             this.LVStoredProcs2.Location = new System.Drawing.Point(6, 30);
             this.LVStoredProcs2.Name = "LVStoredProcs2";
-            this.LVStoredProcs2.Size = new System.Drawing.Size(341, 370);
+            this.LVStoredProcs2.Size = new System.Drawing.Size(341, 341);
             this.LVStoredProcs2.TabIndex = 3;
             this.LVStoredProcs2.UseCompatibleStateImageBehavior = false;
             this.LVStoredProcs2.View = System.Windows.Forms.View.Details;
+            this.LVStoredProcs2.SelectedIndexChanged += new System.EventHandler(this.LVStoredProcs2_SelectedIndexChanged);
             // 
             // columnHeader5
             // 
@@ -237,12 +241,33 @@
             this.CBSnapshot2.TabIndex = 0;
             this.CBSnapshot2.SelectedIndexChanged += new System.EventHandler(this.CBSnapshot2_SelectedIndexChanged);
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.BtnMergeProcs);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 398);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(694, 29);
+            this.flowLayoutPanel1.TabIndex = 3;
+            // 
+            // BtnMergeProcs
+            // 
+            this.BtnMergeProcs.Location = new System.Drawing.Point(3, 3);
+            this.BtnMergeProcs.Name = "BtnMergeProcs";
+            this.BtnMergeProcs.Size = new System.Drawing.Size(75, 23);
+            this.BtnMergeProcs.TabIndex = 0;
+            this.BtnMergeProcs.Text = "Merge Procs";
+            this.BtnMergeProcs.UseVisualStyleBackColor = true;
+            this.BtnMergeProcs.Click += new System.EventHandler(this.BtnMergeProcs_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 449);
             this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -259,6 +284,7 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -286,6 +312,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ToolStripStatusLabel StatusText;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button BtnMergeProcs;
     }
 }
 
