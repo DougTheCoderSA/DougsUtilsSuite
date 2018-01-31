@@ -245,5 +245,14 @@ namespace SnapshotCompare
         {
             SelectCorrespondingItem(LVStoredProcs2, LVStoredProcs1);
         }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            int ControlWidth;
+            int PanelWidth;
+            ControlWidth = BtnMergeProcs.Width;
+            PanelWidth = panel1.Width;
+            BtnMergeProcs.Left = (PanelWidth / 2) - (ControlWidth / 2);
+        }
     }
 }

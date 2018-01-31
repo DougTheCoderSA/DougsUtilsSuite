@@ -9,20 +9,18 @@ using UtilityClasses;
 
 namespace CodeStencil
 {
-    public enum SQLAuthenticationTypeEnum
-    {
-        WindowsAuthentication, SQLServerAuthentication
-    }
-
     public class AppSettings
     {
         IniFile iniFile;
 
-        // Database connection settings
-        public string SQLServerNameOrIP { get; set; }
-        public string SQLUserName { get; set; }
-        public string SQLPassword { get; set; }
-        public string SQLDatabaseName { get; set; }
+        // App State
+        public string LastUsedDBConnection { get; set; }
+        public bool IsServerConnected { get; set; }
+        public string LastUsedDatabase { get; set; }
+        public string LastUsedTable { get; set; }
+        public string LastSelectedColumns { get; set; }
+        public string LastUsedTemplate { get; set; }
+        public bool ColumnAutoSelectAll { get; set; }
 
         // Folder to store the INI file - folder the executable is running in.
         private static string SettingsFolder
@@ -52,10 +50,13 @@ namespace CodeStencil
             {
                 return new AppSettings
                 {
-                    SQLServerNameOrIP = "192.168.0.11",
-                    SQLUserName = "sa",
-                    SQLPassword = "BMAsql2",
-                    SQLDatabaseName = "Forecasting_Dev",
+                    LastUsedDBConnection = ""
+                    ,IsServerConnected = false
+                    ,LastUsedDatabase = ""
+                    ,LastUsedTable = ""
+                    ,LastSelectedColumns = ""
+                    ,LastUsedTemplate = ""
+                    ,ColumnAutoSelectAll = true
                 };
             }
         }
@@ -63,10 +64,13 @@ namespace CodeStencil
         {
             iniFile = new IniFile();
 
-            iniFile.AddSection("Database").AddKey("SQLServerNameOrIP").Value = SQLServerNameOrIP;
-            iniFile.AddSection("Database").AddKey("SQLUserName").Value = SQLUserName;
-            iniFile.AddSection("Database").AddKey("SQLPassword").Value = SQLPassword;
-            iniFile.AddSection("Database").AddKey("SQLDatabaseName").Value = SQLDatabaseName;
+            iniFile.AddSection("General").AddKey("LastUsedDBConnection").Value = LastUsedDBConnection;
+            iniFile.AddSection("General").AddKey("IsServerConnected").Value = Convert.ToString(IsServerConnected);
+            iniFile.AddSection("General").AddKey("LastUsedDatabase").Value = LastUsedDatabase;
+            iniFile.AddSection("General").AddKey("LastUsedTable").Value = LastUsedTable;
+            iniFile.AddSection("General").AddKey("LastSelectedColumns").Value = LastSelectedColumns;
+            iniFile.AddSection("General").AddKey("LastUsedTemplate").Value = LastUsedTemplate;
+            iniFile.AddSection("General").AddKey("ColumnAutoSelectAll").Value = Convert.ToString(ColumnAutoSelectAll);
 
             iniFile.Save(SettingsFile);
         }
@@ -80,10 +84,13 @@ namespace CodeStencil
             {
                 AppSettings DefaultAppSettings = DefaultSettings;
 
-                ini.AddSection("Database").AddKey("SQLServerNameOrIP").Value = DefaultAppSettings.SQLServerNameOrIP;
-                ini.AddSection("Database").AddKey("SQLUserName").Value = DefaultAppSettings.SQLUserName;
-                ini.AddSection("Database").AddKey("SQLPassword").Value = DefaultAppSettings.SQLPassword;
-                ini.AddSection("Database").AddKey("SQLDatabaseName").Value = DefaultAppSettings.SQLDatabaseName;
+                ini.AddSection("General").AddKey("LastUsedDBConnection").Value = DefaultAppSettings.LastUsedDBConnection;
+                ini.AddSection("General").AddKey("IsServerConnected").Value = Convert.ToString(DefaultAppSettings.IsServerConnected);
+                ini.AddSection("General").AddKey("LastUsedDatabase").Value = DefaultAppSettings.LastUsedDatabase;
+                ini.AddSection("General").AddKey("LastUsedTable").Value = DefaultAppSettings.LastUsedTable;
+                ini.AddSection("General").AddKey("LastSelectedColumns").Value = DefaultAppSettings.LastSelectedColumns;
+                ini.AddSection("General").AddKey("LastUsedTemplate").Value = DefaultAppSettings.LastUsedTemplate;
+                ini.AddSection("General").AddKey("ColumnAutoSelectAll").Value = Convert.ToString(DefaultAppSettings.ColumnAutoSelectAll);
 
                 ini.Save(SettingsFile);
 
@@ -97,10 +104,13 @@ namespace CodeStencil
 
                 ini.Load(SettingsFile);
 
-                LoadedSettings.SQLServerNameOrIP = ini.GetKeyValueOrDefault("Database", "SQLServerNameOrIP", DefaultAppSettings.SQLServerNameOrIP, ref IniFileValueAdded);
-                LoadedSettings.SQLUserName = ini.GetKeyValueOrDefault("Database", "SQLUserName", DefaultAppSettings.SQLUserName, ref IniFileValueAdded);
-                LoadedSettings.SQLPassword = ini.GetKeyValueOrDefault("Database", "SQLPassword", DefaultAppSettings.SQLPassword, ref IniFileValueAdded);
-                LoadedSettings.SQLDatabaseName = ini.GetKeyValueOrDefault("Database", "SQLDatabaseName", DefaultAppSettings.SQLDatabaseName, ref IniFileValueAdded);
+                LoadedSettings.LastUsedDBConnection = ini.GetKeyValueOrDefault("General", "LastUsedDBConnection", DefaultAppSettings.LastUsedDBConnection, ref IniFileValueAdded);
+                LoadedSettings.IsServerConnected = Convert.ToBoolean(ini.GetKeyValueOrDefault("General", "IsServerConnected", Convert.ToString(DefaultAppSettings.IsServerConnected), ref IniFileValueAdded));
+                LoadedSettings.LastUsedDatabase = ini.GetKeyValueOrDefault("General", "LastUsedDatabase", DefaultAppSettings.LastUsedDatabase, ref IniFileValueAdded);
+                LoadedSettings.LastUsedTable = ini.GetKeyValueOrDefault("General", "LastUsedTable", DefaultAppSettings.LastUsedTable, ref IniFileValueAdded);
+                LoadedSettings.LastSelectedColumns = ini.GetKeyValueOrDefault("General", "LastSelectedColumns", DefaultAppSettings.LastSelectedColumns, ref IniFileValueAdded);
+                LoadedSettings.LastUsedTemplate = ini.GetKeyValueOrDefault("General", "LastUsedTemplate", DefaultAppSettings.LastUsedTemplate, ref IniFileValueAdded);
+                LoadedSettings.ColumnAutoSelectAll = Convert.ToBoolean(ini.GetKeyValueOrDefault("General", "ColumnAutoSelectAll", Convert.ToString(DefaultAppSettings.ColumnAutoSelectAll), ref IniFileValueAdded));
 
                 if (IniFileValueAdded) ini.Save(SettingsFile); // Save the file if we had to add a missing setting
 

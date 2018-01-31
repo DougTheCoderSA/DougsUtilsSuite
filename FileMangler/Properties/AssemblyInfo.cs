@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CodeStencil 2016")]
-[assembly: AssemblyDescription("Create code from templates, using database objects and data to generate.")]
+[assembly: AssemblyTitle("File Mangler")]
+[assembly: AssemblyDescription("Find, Replace, and Other Operations on Multiple Files")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Douglas Crole")]
-[assembly: AssemblyProduct("CodeStencil")]
-[assembly: AssemblyCopyright("Copyright ©  2016 Douglas Crole")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("FileMangler")]
+[assembly: AssemblyCopyright("Copyright ©  2017 Douglas Crole")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4ba7d9dd-8f9a-458f-a97c-d1f6e5c6d6e1")]
+[assembly: Guid("deb59cbb-1c31-494c-a987-3dd89186cd41")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,6 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.*")]
-//[assembly: AssemblyVersion("1.0.0.0")]
-//[assembly: AssemblyFileVersion("1.0.0.0")]

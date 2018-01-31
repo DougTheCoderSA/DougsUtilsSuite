@@ -46,6 +46,9 @@
             this.BtnDBSelectAll = new System.Windows.Forms.Button();
             this.CLBDatabases = new System.Windows.Forms.CheckedListBox();
             this.GBServerDetails = new System.Windows.Forms.GroupBox();
+            this.BtnSaveConnectionDetails = new System.Windows.Forms.Button();
+            this.CBConnectionName = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.PSQLServerConnStatus = new System.Windows.Forms.Panel();
             this.BtnSQLServerConnect = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -64,6 +67,7 @@
             this.CLBTables = new System.Windows.Forms.CheckedListBox();
             this.TPColumn = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.CColumnAutoSelectAll = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.CBTable = new System.Windows.Forms.ComboBox();
             this.LVColumns = new System.Windows.Forms.ListView();
@@ -79,6 +83,9 @@
             this.BtnColumnSelectNone = new System.Windows.Forms.Button();
             this.BtnColumnSelectAll = new System.Windows.Forms.Button();
             this.TPGenerate = new System.Windows.Forms.TabPage();
+            this.BtnRepeatingLine = new System.Windows.Forms.Button();
+            this.CBMacros = new System.Windows.Forms.ComboBox();
+            this.BtnInsertMacro = new System.Windows.Forms.Button();
             this.BtnDeleteTemplate = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.RTEditTemplate = new System.Windows.Forms.RichTextBox();
@@ -91,6 +98,11 @@
             this.CBCodeTemplate = new System.Windows.Forms.ComboBox();
             this.TPDebug = new System.Windows.Forms.TabPage();
             this.RTDebug = new System.Windows.Forms.RichTextBox();
+            this.TPQuery = new System.Windows.Forms.TabPage();
+            this.TCustomQuery = new System.Windows.Forms.TextBox();
+            this.BtnExecuteQuery = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.LVData = new System.Windows.Forms.ListView();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -107,6 +119,7 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.TPDebug.SuspendLayout();
+            this.TPQuery.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -158,6 +171,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.TPDBServer);
             this.tabControl1.Controls.Add(this.TPTable);
+            this.tabControl1.Controls.Add(this.TPQuery);
             this.tabControl1.Controls.Add(this.TPColumn);
             this.tabControl1.Controls.Add(this.TPGenerate);
             this.tabControl1.Controls.Add(this.TPDebug);
@@ -188,9 +202,9 @@
             this.groupBox1.Controls.Add(this.BtnDBSelectNone);
             this.groupBox1.Controls.Add(this.BtnDBSelectAll);
             this.groupBox1.Controls.Add(this.CLBDatabases);
-            this.groupBox1.Location = new System.Drawing.Point(6, 135);
+            this.groupBox1.Location = new System.Drawing.Point(6, 177);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(846, 397);
+            this.groupBox1.Size = new System.Drawing.Size(846, 355);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Databases to Use in Generate";
@@ -198,7 +212,7 @@
             // BtnDBInvertSelection
             // 
             this.BtnDBInvertSelection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnDBInvertSelection.Location = new System.Drawing.Point(231, 368);
+            this.BtnDBInvertSelection.Location = new System.Drawing.Point(231, 326);
             this.BtnDBInvertSelection.Name = "BtnDBInvertSelection";
             this.BtnDBInvertSelection.Size = new System.Drawing.Size(105, 23);
             this.BtnDBInvertSelection.TabIndex = 3;
@@ -209,7 +223,7 @@
             // BtnDBSelectNone
             // 
             this.BtnDBSelectNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnDBSelectNone.Location = new System.Drawing.Point(120, 368);
+            this.BtnDBSelectNone.Location = new System.Drawing.Point(120, 326);
             this.BtnDBSelectNone.Name = "BtnDBSelectNone";
             this.BtnDBSelectNone.Size = new System.Drawing.Size(105, 23);
             this.BtnDBSelectNone.TabIndex = 2;
@@ -220,7 +234,7 @@
             // BtnDBSelectAll
             // 
             this.BtnDBSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnDBSelectAll.Location = new System.Drawing.Point(9, 368);
+            this.BtnDBSelectAll.Location = new System.Drawing.Point(9, 326);
             this.BtnDBSelectAll.Name = "BtnDBSelectAll";
             this.BtnDBSelectAll.Size = new System.Drawing.Size(105, 23);
             this.BtnDBSelectAll.TabIndex = 1;
@@ -236,13 +250,16 @@
             this.CLBDatabases.FormattingEnabled = true;
             this.CLBDatabases.Location = new System.Drawing.Point(9, 19);
             this.CLBDatabases.Name = "CLBDatabases";
-            this.CLBDatabases.Size = new System.Drawing.Size(831, 334);
+            this.CLBDatabases.Size = new System.Drawing.Size(831, 289);
             this.CLBDatabases.TabIndex = 0;
             // 
             // GBServerDetails
             // 
             this.GBServerDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GBServerDetails.Controls.Add(this.BtnSaveConnectionDetails);
+            this.GBServerDetails.Controls.Add(this.CBConnectionName);
+            this.GBServerDetails.Controls.Add(this.label9);
             this.GBServerDetails.Controls.Add(this.PSQLServerConnStatus);
             this.GBServerDetails.Controls.Add(this.BtnSQLServerConnect);
             this.GBServerDetails.Controls.Add(this.label3);
@@ -254,21 +271,49 @@
             this.GBServerDetails.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GBServerDetails.Location = new System.Drawing.Point(6, 6);
             this.GBServerDetails.Name = "GBServerDetails";
-            this.GBServerDetails.Size = new System.Drawing.Size(846, 123);
+            this.GBServerDetails.Size = new System.Drawing.Size(846, 165);
             this.GBServerDetails.TabIndex = 0;
             this.GBServerDetails.TabStop = false;
             this.GBServerDetails.Text = "SQL Server Details";
             // 
+            // BtnSaveConnectionDetails
+            // 
+            this.BtnSaveConnectionDetails.Location = new System.Drawing.Point(534, 20);
+            this.BtnSaveConnectionDetails.Name = "BtnSaveConnectionDetails";
+            this.BtnSaveConnectionDetails.Size = new System.Drawing.Size(108, 23);
+            this.BtnSaveConnectionDetails.TabIndex = 12;
+            this.BtnSaveConnectionDetails.Text = "Save Connection";
+            this.BtnSaveConnectionDetails.UseVisualStyleBackColor = true;
+            this.BtnSaveConnectionDetails.Click += new System.EventHandler(this.BtnSaveConnectionDetails_Click);
+            // 
+            // CBConnectionName
+            // 
+            this.CBConnectionName.FormattingEnabled = true;
+            this.CBConnectionName.Location = new System.Drawing.Point(165, 22);
+            this.CBConnectionName.Name = "CBConnectionName";
+            this.CBConnectionName.Size = new System.Drawing.Size(363, 21);
+            this.CBConnectionName.TabIndex = 11;
+            this.CBConnectionName.SelectedIndexChanged += new System.EventHandler(this.CBConnectionName_SelectedIndexChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 25);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(92, 13);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "Connection Name";
+            // 
             // PSQLServerConnStatus
             // 
-            this.PSQLServerConnStatus.Location = new System.Drawing.Point(288, 92);
+            this.PSQLServerConnStatus.Location = new System.Drawing.Point(288, 127);
             this.PSQLServerConnStatus.Name = "PSQLServerConnStatus";
             this.PSQLServerConnStatus.Size = new System.Drawing.Size(25, 24);
             this.PSQLServerConnStatus.TabIndex = 9;
             // 
             // BtnSQLServerConnect
             // 
-            this.BtnSQLServerConnect.Location = new System.Drawing.Point(165, 92);
+            this.BtnSQLServerConnect.Location = new System.Drawing.Point(165, 127);
             this.BtnSQLServerConnect.Name = "BtnSQLServerConnect";
             this.BtnSQLServerConnect.Size = new System.Drawing.Size(116, 23);
             this.BtnSQLServerConnect.TabIndex = 6;
@@ -279,7 +324,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 69);
+            this.label3.Location = new System.Drawing.Point(6, 104);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(77, 13);
             this.label3.TabIndex = 5;
@@ -287,7 +332,7 @@
             // 
             // TSQLPassword
             // 
-            this.TSQLPassword.Location = new System.Drawing.Point(165, 66);
+            this.TSQLPassword.Location = new System.Drawing.Point(165, 101);
             this.TSQLPassword.Name = "TSQLPassword";
             this.TSQLPassword.Size = new System.Drawing.Size(176, 20);
             this.TSQLPassword.TabIndex = 4;
@@ -295,7 +340,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 43);
+            this.label2.Location = new System.Drawing.Point(6, 78);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 3;
@@ -303,7 +348,7 @@
             // 
             // TSQLUserName
             // 
-            this.TSQLUserName.Location = new System.Drawing.Point(165, 40);
+            this.TSQLUserName.Location = new System.Drawing.Point(165, 75);
             this.TSQLUserName.Name = "TSQLUserName";
             this.TSQLUserName.Size = new System.Drawing.Size(176, 20);
             this.TSQLUserName.TabIndex = 2;
@@ -311,7 +356,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 17);
+            this.label1.Location = new System.Drawing.Point(6, 52);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(135, 13);
             this.label1.TabIndex = 1;
@@ -319,7 +364,7 @@
             // 
             // TSQLServerNameOrIP
             // 
-            this.TSQLServerNameOrIP.Location = new System.Drawing.Point(165, 14);
+            this.TSQLServerNameOrIP.Location = new System.Drawing.Point(165, 49);
             this.TSQLServerNameOrIP.Name = "TSQLServerNameOrIP";
             this.TSQLServerNameOrIP.Size = new System.Drawing.Size(363, 20);
             this.TSQLServerNameOrIP.TabIndex = 0;
@@ -420,6 +465,7 @@
             this.CLBTables.Name = "CLBTables";
             this.CLBTables.Size = new System.Drawing.Size(834, 409);
             this.CLBTables.TabIndex = 0;
+            this.CLBTables.Click += new System.EventHandler(this.CLBTables_Click);
             // 
             // TPColumn
             // 
@@ -436,6 +482,7 @@
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.CColumnAutoSelectAll);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.CBTable);
             this.groupBox3.Controls.Add(this.LVColumns);
@@ -448,6 +495,18 @@
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Columns to Use in Generate";
+            // 
+            // CColumnAutoSelectAll
+            // 
+            this.CColumnAutoSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.CColumnAutoSelectAll.AutoSize = true;
+            this.CColumnAutoSelectAll.Location = new System.Drawing.Point(356, 504);
+            this.CColumnAutoSelectAll.Name = "CColumnAutoSelectAll";
+            this.CColumnAutoSelectAll.Size = new System.Drawing.Size(95, 17);
+            this.CColumnAutoSelectAll.TabIndex = 8;
+            this.CColumnAutoSelectAll.Text = "Auto Select All";
+            this.CColumnAutoSelectAll.UseVisualStyleBackColor = true;
+            this.CColumnAutoSelectAll.CheckedChanged += new System.EventHandler(this.CColumnAutoSelectAll_CheckedChanged);
             // 
             // label8
             // 
@@ -495,6 +554,7 @@
             this.LVColumns.TabIndex = 7;
             this.LVColumns.UseCompatibleStateImageBehavior = false;
             this.LVColumns.View = System.Windows.Forms.View.Details;
+            this.LVColumns.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.LVColumns_ItemChecked);
             this.LVColumns.Click += new System.EventHandler(this.LVColumns_Click);
             // 
             // columnHeader1
@@ -566,6 +626,9 @@
             // 
             // TPGenerate
             // 
+            this.TPGenerate.Controls.Add(this.BtnRepeatingLine);
+            this.TPGenerate.Controls.Add(this.CBMacros);
+            this.TPGenerate.Controls.Add(this.BtnInsertMacro);
             this.TPGenerate.Controls.Add(this.BtnDeleteTemplate);
             this.TPGenerate.Controls.Add(this.splitContainer1);
             this.TPGenerate.Controls.Add(this.BtnGenerateCode);
@@ -579,6 +642,45 @@
             this.TPGenerate.TabIndex = 2;
             this.TPGenerate.Text = "Generate Code";
             this.TPGenerate.UseVisualStyleBackColor = true;
+            // 
+            // BtnRepeatingLine
+            // 
+            this.BtnRepeatingLine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnRepeatingLine.Location = new System.Drawing.Point(448, 34);
+            this.BtnRepeatingLine.Name = "BtnRepeatingLine";
+            this.BtnRepeatingLine.Size = new System.Drawing.Size(89, 23);
+            this.BtnRepeatingLine.TabIndex = 9;
+            this.BtnRepeatingLine.Text = "Repeating Line";
+            this.BtnRepeatingLine.UseVisualStyleBackColor = true;
+            this.BtnRepeatingLine.Click += new System.EventHandler(this.BtnRepeatingLine_Click);
+            // 
+            // CBMacros
+            // 
+            this.CBMacros.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.CBMacros.FormattingEnabled = true;
+            this.CBMacros.Items.AddRange(new object[] {
+            "@f - Field / Column name",
+            "@l - Comma-Separated Field / Column List",
+            "@t - Table name",
+            "@y - Column Data Type",
+            "@s - Column Size (if varchar)",
+            "@d - Database name",
+            "{t:varchar,int,nvarchar} - End of line filter based on column type"});
+            this.CBMacros.Location = new System.Drawing.Point(543, 35);
+            this.CBMacros.Name = "CBMacros";
+            this.CBMacros.Size = new System.Drawing.Size(228, 21);
+            this.CBMacros.TabIndex = 8;
+            // 
+            // BtnInsertMacro
+            // 
+            this.BtnInsertMacro.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnInsertMacro.Location = new System.Drawing.Point(777, 34);
+            this.BtnInsertMacro.Name = "BtnInsertMacro";
+            this.BtnInsertMacro.Size = new System.Drawing.Size(75, 23);
+            this.BtnInsertMacro.TabIndex = 7;
+            this.BtnInsertMacro.Text = "Insert Macro";
+            this.BtnInsertMacro.UseVisualStyleBackColor = true;
+            this.BtnInsertMacro.Click += new System.EventHandler(this.BtnInsertMacro_Click);
             // 
             // BtnDeleteTemplate
             // 
@@ -619,12 +721,15 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.RTEditTemplate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RTEditTemplate.HideSelection = false;
             this.RTEditTemplate.Location = new System.Drawing.Point(6, 16);
             this.RTEditTemplate.MinimumSize = new System.Drawing.Size(25, 25);
             this.RTEditTemplate.Name = "RTEditTemplate";
+            this.RTEditTemplate.ShowSelectionMargin = true;
             this.RTEditTemplate.Size = new System.Drawing.Size(834, 215);
             this.RTEditTemplate.TabIndex = 1;
             this.RTEditTemplate.Text = "";
+            this.RTEditTemplate.WordWrap = false;
             this.RTEditTemplate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RTEditTemplate_KeyPress);
             // 
             // label6
@@ -648,6 +753,7 @@
             this.RTGeneratedCode.Size = new System.Drawing.Size(834, 212);
             this.RTGeneratedCode.TabIndex = 1;
             this.RTGeneratedCode.Text = "";
+            this.RTGeneratedCode.WordWrap = false;
             // 
             // label7
             // 
@@ -720,6 +826,64 @@
             this.RTDebug.TabIndex = 0;
             this.RTDebug.Text = "";
             // 
+            // TPQuery
+            // 
+            this.TPQuery.Controls.Add(this.LVData);
+            this.TPQuery.Controls.Add(this.label10);
+            this.TPQuery.Controls.Add(this.BtnExecuteQuery);
+            this.TPQuery.Controls.Add(this.TCustomQuery);
+            this.TPQuery.Location = new System.Drawing.Point(4, 22);
+            this.TPQuery.Name = "TPQuery";
+            this.TPQuery.Padding = new System.Windows.Forms.Padding(3);
+            this.TPQuery.Size = new System.Drawing.Size(858, 538);
+            this.TPQuery.TabIndex = 5;
+            this.TPQuery.Text = "Query";
+            this.TPQuery.UseVisualStyleBackColor = true;
+            // 
+            // TCustomQuery
+            // 
+            this.TCustomQuery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TCustomQuery.Location = new System.Drawing.Point(6, 6);
+            this.TCustomQuery.Multiline = true;
+            this.TCustomQuery.Name = "TCustomQuery";
+            this.TCustomQuery.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.TCustomQuery.Size = new System.Drawing.Size(846, 226);
+            this.TCustomQuery.TabIndex = 0;
+            this.TCustomQuery.WordWrap = false;
+            // 
+            // BtnExecuteQuery
+            // 
+            this.BtnExecuteQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnExecuteQuery.Location = new System.Drawing.Point(6, 509);
+            this.BtnExecuteQuery.Name = "BtnExecuteQuery";
+            this.BtnExecuteQuery.Size = new System.Drawing.Size(75, 23);
+            this.BtnExecuteQuery.TabIndex = 1;
+            this.BtnExecuteQuery.Text = "Execute";
+            this.BtnExecuteQuery.UseVisualStyleBackColor = true;
+            this.BtnExecuteQuery.Click += new System.EventHandler(this.BtnExecuteQuery_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 235);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(30, 13);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "Data";
+            // 
+            // LVData
+            // 
+            this.LVData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LVData.Location = new System.Drawing.Point(6, 251);
+            this.LVData.Name = "LVData";
+            this.LVData.Size = new System.Drawing.Size(846, 252);
+            this.LVData.TabIndex = 3;
+            this.LVData.UseCompatibleStateImageBehavior = false;
+            this.LVData.View = System.Windows.Forms.View.Details;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -734,6 +898,7 @@
             this.Name = "FormMain";
             this.Text = "Code Stencil 2016";
             this.Load += new System.EventHandler(this.FormMain_Load);
+            this.Shown += new System.EventHandler(this.FormMain_Shown);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -758,6 +923,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.TPDebug.ResumeLayout(false);
+            this.TPQuery.ResumeLayout(false);
+            this.TPQuery.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -823,6 +990,18 @@
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ColumnHeader columnHeader8;
+        private System.Windows.Forms.Button BtnSaveConnectionDetails;
+        private System.Windows.Forms.ComboBox CBConnectionName;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox CBMacros;
+        private System.Windows.Forms.Button BtnInsertMacro;
+        private System.Windows.Forms.Button BtnRepeatingLine;
+        private System.Windows.Forms.CheckBox CColumnAutoSelectAll;
+        private System.Windows.Forms.TabPage TPQuery;
+        private System.Windows.Forms.TextBox TCustomQuery;
+        private System.Windows.Forms.Button BtnExecuteQuery;
+        private System.Windows.Forms.ListView LVData;
+        private System.Windows.Forms.Label label10;
     }
 }
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zzServiceList", "zzServiceList\zzServiceList.csproj", "{CBEBAEA6-D32D-4E7A-98A0-0CD8FE82FB3E}"
 EndProject
@@ -14,6 +14,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapshotCompare", "SnapshotCompare\SnapshotCompare.csproj", "{0D783D4E-B21A-41BF-8A6B-B6D829EFD7EE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLPivot", "SQLPivot\SQLPivot.csproj", "{B268B1CE-AA5C-49CD-88BF-AE1FE798E359}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zzTopologicalSort", "zzTopologicalSort\zzTopologicalSort.csproj", "{9C0206A3-F84B-4040-9E7F-9DAB77110EE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileMangler", "FileMangler\FileMangler.csproj", "{DEB59CBB-1C31-494C-A987-3DD89186CD41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zzMFTList", "zzMFTList\zzMFTList.csproj", "{34B92B58-78D8-400A-B5E8-6811A641F41F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,8 +51,23 @@ Global
 		{B268B1CE-AA5C-49CD-88BF-AE1FE798E359}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B268B1CE-AA5C-49CD-88BF-AE1FE798E359}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B268B1CE-AA5C-49CD-88BF-AE1FE798E359}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C0206A3-F84B-4040-9E7F-9DAB77110EE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C0206A3-F84B-4040-9E7F-9DAB77110EE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C0206A3-F84B-4040-9E7F-9DAB77110EE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C0206A3-F84B-4040-9E7F-9DAB77110EE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEB59CBB-1C31-494C-A987-3DD89186CD41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEB59CBB-1C31-494C-A987-3DD89186CD41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEB59CBB-1C31-494C-A987-3DD89186CD41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEB59CBB-1C31-494C-A987-3DD89186CD41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34B92B58-78D8-400A-B5E8-6811A641F41F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34B92B58-78D8-400A-B5E8-6811A641F41F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34B92B58-78D8-400A-B5E8-6811A641F41F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34B92B58-78D8-400A-B5E8-6811A641F41F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE182BDA-D7BA-4C05-8057-FF4F087937A9}
 	EndGlobalSection
 EndGlobal

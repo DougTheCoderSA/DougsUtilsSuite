@@ -11,9 +11,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UtilityClasses;
 
 namespace CodeStencil
 {
+    public enum enGenerateSource
+    {
+        Databases = 1,
+        Tables = 2,
+        StoredProcs = 3,
+        Columns = 4
+    }
+
     public partial class FormMain : Form
     {
         public static AppSettings Settings;
@@ -24,17 +33,28 @@ namespace CodeStencil
         public List<string> CodeMacros;
         public List<string> FieldsList;
         public List<string> FieldTypes;
+        public string CommaDelimitedFieldNames;
         public List<int> FieldSizes;
+        public List<int> FieldPrecisions;
+        public List<int> FieldScales;
         public const string LineRepeatIndicator = ".";
+        public const string MacroFieldList = "@l";
         public const string MacroDatabaseName = "@d";
         public const string MacroTableName = "@t";
         public const string MacroColumnName = "@f";
         public const string MacroColMaxLength = "@s";
         public const string MacroColumnType = "@y";
         public string TemplatesFolder;
+        public string DBConnectionsFolder;
         public string ApplicationFolder;
         public bool TemplateLoaded = false;
+        public bool TemplateChangeReversed = false;
         public bool ChangesMadeSinceLastSave = false;
+        public enGenerateSource? GenerateSource = null;
+        public int? PreviousCodeTemplateIndex = null;
+        public int? CurrentCodeTemplateIndex = null;
+        public const string Key = "W\"W#j`@dG3y4vAeXczj_9%s'x^GiAj<{N\\h`SOJY$m>Y{9hOfW\"7q^f,&{1OX;*";
+        public bool Initialising = false;
 
         public FormMain()
         {
@@ -43,36 +63,54 @@ namespace CodeStencil
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            Text = "Code Stencil - Version " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
             // Load settings from ini file
             Settings = AppSettings.Load();
 
-            TSQLServerNameOrIP.Text = Settings.SQLServerNameOrIP;
-            TSQLUserName.Text = Settings.SQLUserName;
-            TSQLPassword.Text = Settings.SQLPassword;
+            //TSQLServerNameOrIP.Text = Settings.SQLServerNameOrIP;
+            //TSQLUserName.Text = Settings.SQLUserName;
+            //TSQLPassword.Text = Settings.SQLPassword;
             
             // Initialise string list with all replaceable macros
             CodeMacros = new List<string>();
             CodeMacros.Add(MacroDatabaseName);
             CodeMacros.Add(MacroTableName);
             CodeMacros.Add(MacroColumnName);
+            CodeMacros.Add(MacroFieldList);
             CodeMacros.Add(MacroColMaxLength);
             CodeMacros.Add(MacroColumnType);
 
             FieldsList = new List<string>();
             FieldSizes = new List<int>();
             FieldTypes = new List<string>();
+            FieldPrecisions = new List<int>();
+            FieldScales = new List<int>();
             // Get templates folder - by default, folder called Templates inside the executable folder.
             ApplicationFolder = Assembly.GetExecutingAssembly().GetName().CodeBase;
             ApplicationFolder = ApplicationFolder.Substring(8).Replace("/", "\\");
             ApplicationFolder = Path.GetDirectoryName(ApplicationFolder);
             TemplatesFolder = Path.Combine(ApplicationFolder, "Templates");
+            DBConnectionsFolder = Path.Combine(ApplicationFolder, "DBConnections");
 
             if (!Directory.Exists(TemplatesFolder))
             {
                 Directory.CreateDirectory(TemplatesFolder);
             }
 
+            if (!Directory.Exists(DBConnectionsFolder))
+            {
+                Directory.CreateDirectory(DBConnectionsFolder);
+            }
+
             PopulateCodeTemplates();
+            PopulateDatabaseConnections();
+
+            if (!string.IsNullOrEmpty(Settings.LastUsedDBConnection) && CBConnectionName.Items.Contains(Settings.LastUsedDBConnection))
+            {
+                CBConnectionName.SelectedIndex = CBConnectionName.Items.IndexOf(Settings.LastUsedDBConnection);
+                LoadDBConnection();
+            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -138,7 +176,10 @@ namespace CodeStencil
                 db.Open();
                 PSQLServerConnStatus.BackColor = Color.Green;
                 DebugLog("Connected to Server: " + TSQLServerNameOrIP.Text, true);
-                SaveConnectionInfo();
+                Settings.IsServerConnected = true;
+                Settings.LastUsedDBConnection = CBConnectionName.Text;
+                Settings.Save();
+
                 PopulateDatabasesList();
             }
             catch (Exception ex)
@@ -148,13 +189,13 @@ namespace CodeStencil
             }
         }
  
-        private void SaveConnectionInfo()
-        {
-            Settings.SQLServerNameOrIP = TSQLServerNameOrIP.Text;
-            Settings.SQLUserName = TSQLUserName.Text;
-            Settings.SQLPassword = TSQLPassword.Text;
-            Settings.Save();
-        }
+        //private void SaveConnectionInfo()
+        //{
+        //    Settings.SQLServerNameOrIP = TSQLServerNameOrIP.Text;
+        //    Settings.SQLUserName = TSQLUserName.Text;
+        //    Settings.SQLPassword = TSQLPassword.Text;
+        //    Settings.Save();
+        //}
 
         public void PopulateDatabasesList()
         {
@@ -218,6 +259,13 @@ namespace CodeStencil
             {
                 db.ChangeDatabase(DatabaseName);
                 CurrentDatabase = DatabaseName;
+                if (!Initialising)
+                {
+                    Settings.LastUsedDatabase = DatabaseName;
+                    Settings.LastUsedTable = "";
+                    Settings.LastSelectedColumns = "";
+                    Settings.Save();
+                }
                 DebugLog("Connected to database: " + DatabaseName, true);
             }
             catch (Exception ex)
@@ -309,6 +357,12 @@ namespace CodeStencil
             LVColumns.Enabled = false;
 
             CurrentTable = CBTable.SelectedItem.ToString();
+            if (!Initialising)
+            {
+                Settings.LastUsedTable = CurrentTable;
+                Settings.LastSelectedColumns = "";
+                Settings.Save();
+            }
 
             // Get the schema for the selected table
             using (SqlCommand cmd = new SqlCommand("SELECT s.name FROM sys.tables t INNER JOIN sys.schemas s ON s.schema_id = t.schema_id WHERE t.name = '" + CurrentTable + "'", db))
@@ -320,9 +374,10 @@ namespace CodeStencil
                         CurrentTableSchema = dr[0].ToString();
                     }
                 }
+                PopulateColumns();
+                GenerateSource = enGenerateSource.Columns;
             }
 
-            PopulateColumns();
         }
 
         private void PopulateColumns()
@@ -339,9 +394,15 @@ namespace CodeStencil
                     FieldsList.Clear();
                     FieldTypes.Clear();
                     FieldSizes.Clear();
+                    FieldPrecisions.Clear();
+                    FieldScales.Clear();
                     while (dr.Read())
                     {
                         item = new ListViewItem();
+                        if (Settings.ColumnAutoSelectAll)
+                        {
+                            item.Checked = true;
+                        }
                         item.Text = dr[0].ToString();
                         FieldsList.Add(dr[0].ToString());
                         item.SubItems.Add(dr[1].ToString());
@@ -349,7 +410,9 @@ namespace CodeStencil
                         item.SubItems.Add(dr[2].ToString());
                         FieldSizes.Add(Convert.ToInt32(dr[2]));
                         item.SubItems.Add(dr[3].ToString());
+                        FieldPrecisions.Add(Convert.ToInt32(dr[3]));
                         item.SubItems.Add(dr[4].ToString());
+                        FieldScales.Add(Convert.ToInt32(dr[4]));
                         item.SubItems.Add(dr[5].ToString());
                         item.SubItems.Add(dr[6].ToString());
                         if (dr[7] == null)
@@ -433,11 +496,13 @@ namespace CodeStencil
                 if (confirmResult == DialogResult.Yes)
                 {
                     File.WriteAllText(TemplateFileName, RTEditTemplate.Text);
+                    TemplateLoaded = true; // We now have a valid template and we want to track changes, even if no template was loaded until now.
                 }
             }
             else
             {
                 File.WriteAllText(TemplateFileName, RTEditTemplate.Text);
+                TemplateLoaded = true; // We now have a valid template and we want to track changes, even if no template was loaded until now.
                 PopulateCodeTemplates();
             }
             ChangesMadeSinceLastSave = false;
@@ -458,9 +523,66 @@ namespace CodeStencil
             CBCodeTemplate.Enabled = true;
         }
 
+        private void PopulateDatabaseConnections()
+        {
+            CBConnectionName.Enabled = false;
+            CBConnectionName.Items.Clear();
+            string DBConnectionName;
+
+            foreach (string DBConnectionFileName in Directory.EnumerateFiles(DBConnectionsFolder, "*.ini"))
+            {
+                DBConnectionName = Path.GetFileNameWithoutExtension(DBConnectionFileName);
+                CBConnectionName.Items.Add(DBConnectionName);
+            }
+
+            CBConnectionName.Enabled = true;
+            
+        }
+
         private void CBCodeTemplate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadTemplate();
+            bool ProceedWithChange = false;
+            if (TemplateLoaded)
+            {
+                if (!TemplateChangeReversed)
+                {
+                    if (ChangesMadeSinceLastSave)
+                    {
+                        var confirmResult = MessageBox.Show("You have made changes to the code template. Are you sure you want to discard them and load another template?",
+                            "Confirm Load Without Saving",
+                            MessageBoxButtons.YesNo);
+                        if (confirmResult != DialogResult.Yes)
+                        {
+                            TemplateChangeReversed = true;
+                            if (PreviousCodeTemplateIndex != null)
+                            {
+                                CBCodeTemplate.SelectedIndex = PreviousCodeTemplateIndex.GetValueOrDefault();
+                            }
+                            TemplateChangeReversed = false;
+                        }
+                        else
+                        {
+                            ProceedWithChange = true;
+                        }
+                    }
+                    else
+                    {
+                        ProceedWithChange = true;
+                    }
+                }
+            }
+            else
+            {
+                ProceedWithChange = true;
+            }
+
+            if (ProceedWithChange)
+            {
+                PreviousCodeTemplateIndex = CurrentCodeTemplateIndex;
+                CurrentCodeTemplateIndex = CBCodeTemplate.SelectedIndex;
+                TemplateChangeReversed = false;
+                LoadTemplate();
+            }
         }
 
         private void LoadTemplate()
@@ -480,12 +602,82 @@ namespace CodeStencil
             {
                 RTEditTemplate.Text = File.ReadAllText(TemplateFileName);
                 TemplateLoaded = true;
+                ChangesMadeSinceLastSave = false;
+                if (!Initialising)
+                {
+                    Settings.LastUsedTemplate = CBCodeTemplate.Text;
+                    Settings.Save();
+                }
             }
             else
             {
                 MessageBox.Show("The template you are trying to load no longer exists.");
                 PopulateCodeTemplates();
             }
+        }
+
+        private void LoadDBConnection()
+        {
+            string DBConnectionName, DBConnectionFileName;
+            DBConnectionName = CBConnectionName.Text;
+
+            if (string.IsNullOrEmpty(DBConnectionName))
+            {
+                return;
+            }
+
+            DBConnectionFileName = DBConnectionName + ".ini";
+            DBConnectionFileName = Path.Combine(DBConnectionsFolder, DBConnectionFileName);
+
+            if (File.Exists(DBConnectionFileName))
+            {
+                IniFile ini = new IniFile();
+                ini.Load(DBConnectionFileName);
+                TSQLServerNameOrIP.Text = ini.GetKeyValue("DBConnectionSettings", "SQLServerNameOrIP");
+                TSQLUserName.Text = StringCipher.Decrypt(ini.GetKeyValue("DBConnectionSettings", "SQLUserName"), Key);
+                TSQLPassword.Text = StringCipher.Decrypt(ini.GetKeyValue("DBConnectionSettings", "SQLPassword"), Key);
+                Settings.LastUsedDBConnection = DBConnectionName;
+                Settings.Save();
+            }
+            else
+            {
+                MessageBox.Show("The connection you are trying to load no longer exists.");
+                PopulateDatabaseConnections();
+            }
+
+        }
+
+        private void SaveDBConnection()
+        {
+            string DBConnectionName, DBConnectionFileName;
+            DBConnectionName = CBConnectionName.Text;
+
+            if (string.IsNullOrEmpty(DBConnectionName))
+            {
+                MessageBox.Show("Please enter a name for the connection.");
+                return;
+            }
+
+            DBConnectionFileName = DBConnectionName + ".ini";
+            DBConnectionFileName = Path.Combine(DBConnectionsFolder, DBConnectionFileName);
+
+            if (File.Exists(DBConnectionFileName))
+            {
+                var confirmResult = MessageBox.Show("Are you sure to overwrite this database connection?",
+                    "Confirm Overwrite",
+                    MessageBoxButtons.YesNo);
+                if (confirmResult != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
+            IniFile ini = new IniFile();
+            ini.AddSection("DBConnectionSettings").AddKey("SQLServerNameOrIP").Value = TSQLServerNameOrIP.Text;
+            ini.AddSection("DBConnectionSettings").AddKey("SQLUserName").Value = StringCipher.Encrypt(TSQLUserName.Text, Key);
+            ini.AddSection("DBConnectionSettings").AddKey("SQLPassword").Value = StringCipher.Encrypt(TSQLPassword.Text, Key);
+            ini.Save(DBConnectionFileName);
+            PopulateDatabaseConnections();
         }
 
         private void RTEditTemplate_KeyPress(object sender, KeyPressEventArgs e)
@@ -545,41 +737,67 @@ namespace CodeStencil
 
             int iGCCurrentLine = 0;
             int iGCNumLines = 1;  // Number of repeating lines
+            bool InRepeatingSection = false;
+            bool FirstLineIsDifferent = false;
+            bool OnDifferentFirstLine = false;
+            bool FirstLineGenerated = false;
 
+            // Loop through lines
             while (iGCCurrentLine < RTEditTemplate.Lines.Count())
             {
                 iGCNumLines = 1;
                 string SGCCurrentLine = RTEditTemplate.Lines[iGCCurrentLine];
 
+                // Process non-empty lines
                 if (SGCCurrentLine.Length != 0)
                 {
-                    if (SGCCurrentLine.Substring(0, 1) == ".")  //# If this line is a repeating line
+                    // Check for repeating lines
+                    if ((SGCCurrentLine.Substring(0, 1) == ".") || (SGCCurrentLine.Substring(0, 1) == "!"))  //# If this line is a repeating line
                     {
-
+                        InRepeatingSection = true;
+                        if (SGCCurrentLine.Substring(0, 1) == "!")
+                        {
+                            FirstLineIsDifferent = true;
+                            OnDifferentFirstLine = true;
+                        }
                         iGCNumLines = GetNumberOfLinesThatRepeat(iGCCurrentLine);
-                        //# Iterate through the selected field names
+
+                        bool FirstSelectedField = true;
+
+                        //# Iterate through fields
                         for (int iGC = 0; iGC < LVColumns.Items.Count; iGC++)
                         {
+                            // Generate if the field is checked
                             if (LVColumns.Items[iGC].Checked)
                             {
-
+                                int iCurLine = 1;
                                 //# Iterate through the repeating lines in the template
                                 for (int jGC = iGCCurrentLine; jGC < (iGCCurrentLine + iGCNumLines); jGC++)
                                 {
-                                    SGCCurrentLine = RTEditTemplate.Lines[jGC];
-                                    if (ShouldGenerateLine(ref SGCCurrentLine, iGC))
+                                    if ((!FirstLineIsDifferent) 
+                                        || (FirstLineIsDifferent && OnDifferentFirstLine && FirstSelectedField)
+                                        || (FirstLineIsDifferent && !OnDifferentFirstLine && !FirstSelectedField && iCurLine > 1))
                                     {
-                                        GeneratedCode = GeneratedCode + ParseThisLine(SGCCurrentLine, iGC, SpacesToIndent) + "\r\n";
+                                        SGCCurrentLine = RTEditTemplate.Lines[jGC];
+                                        if (ShouldGenerateLine(ref SGCCurrentLine, iGC))
+                                        {
+                                            GeneratedCode = GeneratedCode + ParseThisLine(SGCCurrentLine, iGC, SpacesToIndent) + "\r\n";
+                                        }
                                     }
-
+                                    iCurLine++;
+                                    OnDifferentFirstLine = false;
                                 }
-                                
+
+                                FirstSelectedField = false;
                             }
 
                         }
                     }
                     else
                     {
+                        InRepeatingSection = false;
+                        FirstLineIsDifferent = false;
+                        FirstLineGenerated = false;
                         GeneratedCode = GeneratedCode + ParseThisLine(SGCCurrentLine, 0, SpacesToIndent) + "\r\n";
                     }
                 }
@@ -592,6 +810,8 @@ namespace CodeStencil
             }
 
             RTGeneratedCode.Text = GeneratedCode;
+
+            Clipboard.SetText(RTGeneratedCode.Text);
 
             //return GeneratedCode;
 
@@ -653,11 +873,56 @@ namespace CodeStencil
                     iPTLNumChars = iPTLPos - iPTLCurrentChar;  //# Get from current to just before macro
                     SParsedString = SParsedString + STemplate.Substring(iPTLCurrentChar, iPTLNumChars);
                     //# Replace the macro string
-                    if (SMacro == "@t") SParsedString = SParsedString + CBTable.Text;
-                    if (SMacro == "@s") SParsedString = SParsedString + FieldSizes[iPTLCurrentField];
-                    if (SMacro == "@f") SParsedString = SParsedString + FieldsList[iPTLCurrentField];
-                    if (SMacro == "@d") SParsedString = SParsedString + CBDatabase.Text;
-                    if (SMacro == "@y") SParsedString = SParsedString + FieldTypes[iPTLCurrentField];
+                    if (SMacro == MacroTableName) SParsedString = SParsedString + CBTable.Text;
+                    if (FieldsList.Count > 0)
+                    {
+                        if (SMacro == MacroColMaxLength) SParsedString = SParsedString + FieldSizes[iPTLCurrentField];
+                        if (SMacro == MacroColumnName) SParsedString = SParsedString + FieldsList[iPTLCurrentField];
+                        if (SMacro == MacroFieldList) SParsedString = SParsedString + CommaDelimitedFieldNames;
+                        if (SMacro == MacroDatabaseName) SParsedString = SParsedString + CBDatabase.Text;
+                        if (SMacro == MacroColumnType)
+                        {
+                            SParsedString = SParsedString + FieldTypes[iPTLCurrentField];
+                            string sColumnSize = "";
+                            if (FieldSizes[iPTLCurrentField] == -1)
+                            {
+                                sColumnSize = "max";
+                            }
+                            else
+                            {
+                                sColumnSize = FieldSizes[iPTLCurrentField].ToString();
+                            }
+                            switch (FieldTypes[iPTLCurrentField])
+                            {
+                                case "varchar":
+                                    SParsedString = SParsedString + "(" + sColumnSize + ")";
+                                    break;
+                                case "nvarchar":
+                                    SParsedString = SParsedString + "(" + sColumnSize + ")";
+                                    break;
+                                case "char":
+                                    SParsedString = SParsedString + "(" + sColumnSize + ")";
+                                    break;
+                                case "nchar":
+                                    SParsedString = SParsedString + "(" + sColumnSize + ")";
+                                    break;
+                                case "binary":
+                                    SParsedString = SParsedString + "(" + sColumnSize + ")";
+                                    break;
+                                case "varbinary":
+                                    SParsedString = SParsedString + "(" + sColumnSize + ")";
+                                    break;
+                                case "numeric":
+                                    SParsedString = SParsedString + "(" + FieldPrecisions[iPTLCurrentField] + "," + FieldScales[iPTLCurrentField] + ")";
+                                    break;
+                                case "decimal":
+                                    SParsedString = SParsedString + "(" + FieldPrecisions[iPTLCurrentField] + "," + FieldScales[iPTLCurrentField] + ")";
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
                     //# Trim the copied characters from the template string
                     iPTLPos = iPTLPos + SMacro.Length;
                     iPTLNumChars = STemplate.Length - iPTLPos;
@@ -681,10 +946,10 @@ namespace CodeStencil
             //# Add the rest of the template line after all macros.
             if (STemplate.Length != 0) SParsedString = SParsedString + STemplate;
 
-            //# Chop leading "." if present
+            //# Chop leading "." or "!" if present
             if (SParsedString != "")
             {
-                if (SParsedString.Substring(0, 1) == ".")
+                if ((SParsedString.Substring(0, 1) == ".") || (SParsedString.Substring(0, 1) == "!"))
                     SParsedString = SParsedString.Substring(1);
             }
 
@@ -711,7 +976,7 @@ namespace CodeStencil
             {
                 if (RTEditTemplate.Lines[iNLR].Length == 0) break;
                 
-                if (RTEditTemplate.Lines[iNLR].Substring(0, 1) == ".")
+                if ((RTEditTemplate.Lines[iNLR].Substring(0, 1) == ".") || (RTEditTemplate.Lines[iNLR].Substring(0, 1) == "!"))
                     iCount = iCount + 1;
                 else
                     break;
@@ -766,6 +1031,297 @@ namespace CodeStencil
                 string SelectedColumnName;
                 SelectedColumnName = LVColumns.SelectedItems[0].Text;
                 Clipboard.SetText(SelectedColumnName);
+            }
+        }
+
+        private void CLBTables_Click(object sender, EventArgs e)
+        {
+            if (CLBTables.SelectedItems.Count > 0)
+            {
+                string SelectedColumnName;
+                SelectedColumnName = CLBTables.SelectedItems[0].ToString();
+                Clipboard.SetText(SelectedColumnName);
+            }
+        }
+
+        private void BtnSaveConnectionDetails_Click(object sender, EventArgs e)
+        {
+            SaveDBConnection();
+        }
+
+        private void CBConnectionName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadDBConnection();
+        }
+
+        private void BtnRepeatingLine_Click(object sender, EventArgs e)
+        {
+            ToggleRepeatingLines();
+        }
+
+        /// <summary>
+        /// Add or remove repeating indicator from all selected lines.
+        /// </summary>
+        /// <remarks>If some lines are repeating and some not, all will be made repeating.</remarks>
+        private void ToggleRepeatingLines()
+        {
+            string SelectedText = RTEditTemplate.SelectedText;
+
+            // Check whether some lines in the selected text are already repeating lines
+            if (AllLinesRepeat(SelectedText))
+            {
+                SelectedText = RemoveRepeatingLines(SelectedText);
+            }
+            else
+            {
+                SelectedText = AddRepeatingLines(SelectedText);
+            }
+
+            RTEditTemplate.SelectedText = SelectedText;
+        }
+
+        private bool StringContains(string StrToSearch, string RegExPattern)
+        {
+            bool Result = false;
+
+            RegexOptions options = RegexOptions.IgnoreCase
+                                   | RegexOptions.ECMAScript
+                                   | RegexOptions.Multiline;
+            Regex re = new Regex(RegExPattern, options);
+
+            Result = re.IsMatch(StrToSearch);
+
+            return Result;
+        }
+
+        private bool AllLinesRepeat(string StrToSearch)
+        {
+            bool Result = true;
+            string RegExPattern = @"^(\.)?(.*)$";
+
+            RegexOptions options = RegexOptions.IgnoreCase
+                                   | RegexOptions.ECMAScript
+                                   | RegexOptions.Multiline;
+            Regex re = new Regex(RegExPattern, options);
+
+            MatchCollection LinesMatched = re.Matches(StrToSearch);
+
+            int i = 0;
+            foreach (Match curLine in LinesMatched)
+            {
+                if (curLine.Groups[1].Value != ".")
+                {
+                    if ((curLine.Value != "") && (i != (LinesMatched.Count - 1)))
+                    {
+                        Result = false;
+                    }
+                }
+                i++;
+            }
+
+            return Result;
+        }
+
+        private string RemoveRepeatingLines(string StrToSearch)
+        {
+            string Result = "";
+            string RegExPattern = @"^(\.)?(.*)$";
+            string ReplaceWith = @"${2}";
+
+            RegexOptions options = RegexOptions.IgnoreCase
+                                   | RegexOptions.ECMAScript
+                                   | RegexOptions.Multiline;
+            Regex re = new Regex(RegExPattern, options);
+
+            Result = re.Replace(StrToSearch, ReplaceWith);
+
+            return Result;
+        }
+
+        private string AddRepeatingLines(string StrToSearch)
+        {
+            string Result = "";
+            string RegExPattern = @"^(\.)?(.*)$";
+            string ReplaceWith = @".${2}";
+
+            RegexOptions options = RegexOptions.IgnoreCase
+                                   | RegexOptions.ECMAScript
+                                   | RegexOptions.Multiline;
+            Regex re = new Regex(RegExPattern, options);
+            Regex re2 = new Regex(RegExPattern, options);
+
+            MatchCollection LinesMatched = re.Matches(StrToSearch);
+
+            int i = 0;
+            foreach (Match curLine in LinesMatched)
+            {
+                if (!((curLine.Value == "") && (i == (LinesMatched.Count - 1))))
+                {
+                    Result += re2.Replace(curLine.Value, ReplaceWith);
+                }
+                else
+                {
+                    Result += curLine.Value;
+                }
+                if (i != (LinesMatched.Count - 1))
+                {
+                    Result += "\r\n";
+                }
+                i++;
+            }
+
+            return Result;
+        }
+
+        // Take the selected macro from the dropdown and insert it into the code template. Regex used to strip out descriptive text.
+        private void InsertMacro()
+        {
+            string SelectedMacro = CBMacros.Text;
+            string InsertMacro = "";
+            string RegExPattern = @"^(.*)\s-\s(.*)$";
+            string ReplaceWith = @"${1}";
+
+
+            RegexOptions options = RegexOptions.IgnoreCase
+                                   | RegexOptions.ECMAScript
+                                   | RegexOptions.Multiline;
+            Regex re = new Regex(RegExPattern, options);
+
+            InsertMacro = re.Replace(SelectedMacro, ReplaceWith);
+
+            RTEditTemplate.SelectedText = RTEditTemplate.SelectedText + InsertMacro;
+        }
+
+        private void BtnInsertMacro_Click(object sender, EventArgs e)
+        {
+            InsertMacro();
+        }
+
+        private void LVColumns_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            if (!Initialising)
+            {
+                BuildSelectedColumnsList();
+            }
+        }
+
+        private void BuildSelectedColumnsList()
+        {
+            List<string> SelectedColumns = new List<string>();
+            foreach (ListViewItem item in LVColumns.CheckedItems)
+            {
+                SelectedColumns.Add(item.Text);
+            }
+            CommaDelimitedFieldNames = string.Join(",", SelectedColumns.ToArray());
+            Settings.LastSelectedColumns = CommaDelimitedFieldNames;
+            Settings.Save();
+        }
+
+        private void FormMain_Shown(object sender, EventArgs e)
+        {
+            Initialising = true;
+
+            CColumnAutoSelectAll.Checked = Settings.ColumnAutoSelectAll;
+
+            // Try to get everything set up as per the last time the app was run - ie selected database, table, columns
+            if (Settings.IsServerConnected)
+            {
+                SQLServer_Connect();
+
+                if ((CBDatabase.Items.Count > 0) && !string.IsNullOrEmpty(Settings.LastUsedDatabase) && CBDatabase.Items.Contains(Settings.LastUsedDatabase))
+                {
+                    // Select the last used database in the dropdown list
+                    CBDatabase.SelectedIndex = CBDatabase.Items.IndexOf(Settings.LastUsedDatabase);
+                }
+
+                if ((CBTable.Items.Count > 0) && !string.IsNullOrEmpty(Settings.LastUsedTable) && CBTable.Items.Contains(Settings.LastUsedTable))
+                {
+                    // Select the last used table in the dropdown list
+                    CBTable.SelectedIndex = CBTable.Items.IndexOf(Settings.LastUsedTable);
+                }
+
+                if ((LVColumns.Items.Count > 0) && (!string.IsNullOrEmpty(Settings.LastSelectedColumns)))
+                {
+                    // Split up the list of selected columns into an array, and use that to select the columns in the listview
+                    List<string> ListSelectedColumns = new List<string>();
+                    ListSelectedColumns.AddRange(Settings.LastSelectedColumns.Split(',').ToList());
+                    foreach (string selectedColumn in ListSelectedColumns)
+                    {
+                        ListViewItem item1 = LVColumns.FindItemWithText(selectedColumn);
+                        if (item1 != null)
+                        {
+                            item1.Checked = true;
+                        }
+                    }
+                }
+
+                if ((CBCodeTemplate.Items.Count > 0) && (!string.IsNullOrEmpty(Settings.LastUsedTemplate)) && (CBCodeTemplate.Items.Contains(Settings.LastUsedTemplate)))
+                {
+                    // Select the last used code template in the dropdown list, and generate code from the template if columns selected
+                    CBCodeTemplate.SelectedIndex = CBCodeTemplate.Items.IndexOf(Settings.LastUsedTemplate);
+                    if (LVColumns.CheckedItems.Count > 0) // TODO: Change this condition when other sources can be used for code generation
+                    {
+                        BuildSelectedColumnsList();
+                        GenerateCode();
+                    }
+                }
+            }
+            Initialising = false;
+
+        }
+
+        private void CColumnAutoSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.ColumnAutoSelectAll = CColumnAutoSelectAll.Checked;
+            Settings.Save();
+        }
+
+        private void BtnExecuteQuery_Click(object sender, EventArgs e)
+        {
+            ExecuteQuery();
+        }
+
+        private void ExecuteQuery()
+        {
+            ListViewItem item;
+            LVColumns.Items.Clear();
+            LVData.Items.Clear();
+            LVData.Columns.Clear();
+            using (SqlCommand cmd = new SqlCommand(TCustomQuery.Text, db))
+            {
+                using (IDataReader dr = cmd.ExecuteReader())
+                {
+                    FieldsList.Clear();
+                    FieldTypes.Clear();
+                    FieldSizes.Clear();
+                    FieldPrecisions.Clear();
+                    FieldScales.Clear();
+
+                    // Column names and types
+                    for (int col = 0; col < dr.FieldCount; col++)
+                    {
+                        item = new ListViewItem();
+                        if (Settings.ColumnAutoSelectAll)
+                        {
+                            item.Checked = true;
+                        }
+                        item.Text = dr.GetName(col).ToString();         // Gets the column name
+                        FieldsList.Add(dr.GetName(col).ToString());
+                        LVData.Columns.Add(col.ToString(), dr.GetName(col).ToString());
+                        item.SubItems.Add(dr.GetDataTypeName(col).ToString());
+                        FieldTypes.Add(dr.GetDataTypeName(col).ToString());
+                        FieldSizes.Add(0);
+                        FieldPrecisions.Add(0);
+                        FieldScales.Add(0);
+                        // Console.Write(dr.GetFieldType(col).ToString());    // Gets the column type
+                        // Console.Write(dr.GetDataTypeName(col).ToString()); // Gets the column database type
+                        LVColumns.Items.Add(item);
+                    }
+
+                    int iRow = 1;
+
+
+                }
             }
         }
     }

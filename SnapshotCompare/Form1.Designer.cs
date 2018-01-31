@@ -48,15 +48,15 @@
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
             this.CBSnapshot2 = new System.Windows.Forms.ComboBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.BtnMergeProcs = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -241,19 +241,10 @@
             this.CBSnapshot2.TabIndex = 0;
             this.CBSnapshot2.SelectedIndexChanged += new System.EventHandler(this.CBSnapshot2_SelectedIndexChanged);
             // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.Controls.Add(this.BtnMergeProcs);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 398);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(694, 29);
-            this.flowLayoutPanel1.TabIndex = 3;
-            // 
             // BtnMergeProcs
             // 
-            this.BtnMergeProcs.Location = new System.Drawing.Point(3, 3);
+            this.BtnMergeProcs.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.BtnMergeProcs.Location = new System.Drawing.Point(297, 3);
             this.BtnMergeProcs.Name = "BtnMergeProcs";
             this.BtnMergeProcs.Size = new System.Drawing.Size(75, 23);
             this.BtnMergeProcs.TabIndex = 0;
@@ -261,19 +252,30 @@
             this.BtnMergeProcs.UseVisualStyleBackColor = true;
             this.BtnMergeProcs.Click += new System.EventHandler(this.BtnMergeProcs_Click);
             // 
+            // panel1
+            // 
+            this.panel1.AutoSize = true;
+            this.panel1.Controls.Add(this.BtnMergeProcs);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 398);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(694, 29);
+            this.panel1.TabIndex = 3;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 449);
             this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "SQL Snapshot Compare";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Resize += new System.EventHandler(this.Form1_Resize);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -284,7 +286,7 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -312,8 +314,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ToolStripStatusLabel StatusText;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button BtnMergeProcs;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
