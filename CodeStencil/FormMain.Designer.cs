@@ -66,11 +66,6 @@
             this.BtnTableSelectNone = new System.Windows.Forms.Button();
             this.BtnTableSelectAll = new System.Windows.Forms.Button();
             this.CLBTables = new System.Windows.Forms.CheckedListBox();
-            this.TPQuery = new System.Windows.Forms.TabPage();
-            this.LVData = new System.Windows.Forms.ListView();
-            this.label10 = new System.Windows.Forms.Label();
-            this.BtnExecuteQuery = new System.Windows.Forms.Button();
-            this.TCustomQuery = new System.Windows.Forms.TextBox();
             this.TPColumn = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.CColumnAutoSelectAll = new System.Windows.Forms.CheckBox();
@@ -94,7 +89,7 @@
             this.BtnInsertMacro = new System.Windows.Forms.Button();
             this.BtnDeleteTemplate = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.RTEditTemplate = new System.Windows.Forms.RichTextBox();
+            this.TEditTemplate = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.RTGeneratedCode = new System.Windows.Forms.RichTextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -102,6 +97,11 @@
             this.BtnSaveCodeTemplate = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.CBCodeTemplate = new System.Windows.Forms.ComboBox();
+            this.TPQuery = new System.Windows.Forms.TabPage();
+            this.LVData = new System.Windows.Forms.ListView();
+            this.label10 = new System.Windows.Forms.Label();
+            this.BtnExecuteQuery = new System.Windows.Forms.Button();
+            this.TCustomQuery = new System.Windows.Forms.TextBox();
             this.TPExecProc = new System.Windows.Forms.TabPage();
             this.TPDebug = new System.Windows.Forms.TabPage();
             this.RTDebug = new System.Windows.Forms.RichTextBox();
@@ -113,7 +113,6 @@
             this.GBServerDetails.SuspendLayout();
             this.TPTable.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.TPQuery.SuspendLayout();
             this.TPColumn.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.TPGenerate.SuspendLayout();
@@ -121,6 +120,7 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.TPQuery.SuspendLayout();
             this.TPDebug.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -173,9 +173,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.TPDBServer);
             this.tabControl1.Controls.Add(this.TPTable);
-            this.tabControl1.Controls.Add(this.TPQuery);
             this.tabControl1.Controls.Add(this.TPColumn);
             this.tabControl1.Controls.Add(this.TPGenerate);
+            this.tabControl1.Controls.Add(this.TPQuery);
             this.tabControl1.Controls.Add(this.TPExecProc);
             this.tabControl1.Controls.Add(this.TPDebug);
             this.tabControl1.Location = new System.Drawing.Point(12, 27);
@@ -481,65 +481,6 @@
             this.CLBTables.TabIndex = 0;
             this.CLBTables.Click += new System.EventHandler(this.CLBTables_Click);
             // 
-            // TPQuery
-            // 
-            this.TPQuery.Controls.Add(this.LVData);
-            this.TPQuery.Controls.Add(this.label10);
-            this.TPQuery.Controls.Add(this.BtnExecuteQuery);
-            this.TPQuery.Controls.Add(this.TCustomQuery);
-            this.TPQuery.Location = new System.Drawing.Point(4, 22);
-            this.TPQuery.Name = "TPQuery";
-            this.TPQuery.Padding = new System.Windows.Forms.Padding(3);
-            this.TPQuery.Size = new System.Drawing.Size(858, 568);
-            this.TPQuery.TabIndex = 5;
-            this.TPQuery.Text = "Query";
-            this.TPQuery.UseVisualStyleBackColor = true;
-            // 
-            // LVData
-            // 
-            this.LVData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.LVData.GridLines = true;
-            this.LVData.Location = new System.Drawing.Point(6, 251);
-            this.LVData.Name = "LVData";
-            this.LVData.Size = new System.Drawing.Size(846, 254);
-            this.LVData.TabIndex = 3;
-            this.LVData.UseCompatibleStateImageBehavior = false;
-            this.LVData.View = System.Windows.Forms.View.Details;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 235);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(30, 13);
-            this.label10.TabIndex = 2;
-            this.label10.Text = "Data";
-            // 
-            // BtnExecuteQuery
-            // 
-            this.BtnExecuteQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BtnExecuteQuery.Location = new System.Drawing.Point(6, 511);
-            this.BtnExecuteQuery.Name = "BtnExecuteQuery";
-            this.BtnExecuteQuery.Size = new System.Drawing.Size(75, 23);
-            this.BtnExecuteQuery.TabIndex = 1;
-            this.BtnExecuteQuery.Text = "Execute";
-            this.BtnExecuteQuery.UseVisualStyleBackColor = true;
-            this.BtnExecuteQuery.Click += new System.EventHandler(this.BtnExecuteQuery_Click);
-            // 
-            // TCustomQuery
-            // 
-            this.TCustomQuery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TCustomQuery.Location = new System.Drawing.Point(6, 6);
-            this.TCustomQuery.Multiline = true;
-            this.TCustomQuery.Name = "TCustomQuery";
-            this.TCustomQuery.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TCustomQuery.Size = new System.Drawing.Size(846, 226);
-            this.TCustomQuery.TabIndex = 0;
-            this.TCustomQuery.WordWrap = false;
-            // 
             // TPColumn
             // 
             this.TPColumn.Controls.Add(this.groupBox3);
@@ -783,7 +724,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.RTEditTemplate);
+            this.splitContainer1.Panel1.Controls.Add(this.TEditTemplate);
             this.splitContainer1.Panel1.Controls.Add(this.label6);
             // 
             // splitContainer1.Panel2
@@ -794,22 +735,23 @@
             this.splitContainer1.SplitterDistance = 247;
             this.splitContainer1.TabIndex = 5;
             // 
-            // RTEditTemplate
+            // TEditTemplate
             // 
-            this.RTEditTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.TEditTemplate.AcceptsReturn = true;
+            this.TEditTemplate.AcceptsTab = true;
+            this.TEditTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.RTEditTemplate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RTEditTemplate.HideSelection = false;
-            this.RTEditTemplate.Location = new System.Drawing.Point(6, 16);
-            this.RTEditTemplate.MinimumSize = new System.Drawing.Size(25, 25);
-            this.RTEditTemplate.Name = "RTEditTemplate";
-            this.RTEditTemplate.ShowSelectionMargin = true;
-            this.RTEditTemplate.Size = new System.Drawing.Size(834, 228);
-            this.RTEditTemplate.TabIndex = 1;
-            this.RTEditTemplate.Text = "";
-            this.RTEditTemplate.WordWrap = false;
-            this.RTEditTemplate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RTEditTemplate_KeyPress);
+            this.TEditTemplate.Font = new System.Drawing.Font("Consolas", 9F);
+            this.TEditTemplate.Location = new System.Drawing.Point(6, 16);
+            this.TEditTemplate.MaxLength = 0;
+            this.TEditTemplate.Multiline = true;
+            this.TEditTemplate.Name = "TEditTemplate";
+            this.TEditTemplate.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.TEditTemplate.Size = new System.Drawing.Size(834, 228);
+            this.TEditTemplate.TabIndex = 1;
+            this.TEditTemplate.WordWrap = false;
+            this.TEditTemplate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TEditTemplate_KeyPress);
             // 
             // label6
             // 
@@ -885,6 +827,66 @@
             this.CBCodeTemplate.Size = new System.Drawing.Size(761, 21);
             this.CBCodeTemplate.TabIndex = 1;
             this.CBCodeTemplate.SelectedIndexChanged += new System.EventHandler(this.CBCodeTemplate_SelectedIndexChanged);
+            this.CBCodeTemplate.Enter += new System.EventHandler(this.CBCodeTemplate_Enter);
+            // 
+            // TPQuery
+            // 
+            this.TPQuery.Controls.Add(this.LVData);
+            this.TPQuery.Controls.Add(this.label10);
+            this.TPQuery.Controls.Add(this.BtnExecuteQuery);
+            this.TPQuery.Controls.Add(this.TCustomQuery);
+            this.TPQuery.Location = new System.Drawing.Point(4, 22);
+            this.TPQuery.Name = "TPQuery";
+            this.TPQuery.Padding = new System.Windows.Forms.Padding(3);
+            this.TPQuery.Size = new System.Drawing.Size(858, 568);
+            this.TPQuery.TabIndex = 5;
+            this.TPQuery.Text = "Query";
+            this.TPQuery.UseVisualStyleBackColor = true;
+            // 
+            // LVData
+            // 
+            this.LVData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LVData.GridLines = true;
+            this.LVData.Location = new System.Drawing.Point(6, 251);
+            this.LVData.Name = "LVData";
+            this.LVData.Size = new System.Drawing.Size(846, 254);
+            this.LVData.TabIndex = 3;
+            this.LVData.UseCompatibleStateImageBehavior = false;
+            this.LVData.View = System.Windows.Forms.View.Details;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 235);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(30, 13);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "Data";
+            // 
+            // BtnExecuteQuery
+            // 
+            this.BtnExecuteQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnExecuteQuery.Location = new System.Drawing.Point(6, 511);
+            this.BtnExecuteQuery.Name = "BtnExecuteQuery";
+            this.BtnExecuteQuery.Size = new System.Drawing.Size(75, 23);
+            this.BtnExecuteQuery.TabIndex = 1;
+            this.BtnExecuteQuery.Text = "Execute";
+            this.BtnExecuteQuery.UseVisualStyleBackColor = true;
+            this.BtnExecuteQuery.Click += new System.EventHandler(this.BtnExecuteQuery_Click);
+            // 
+            // TCustomQuery
+            // 
+            this.TCustomQuery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TCustomQuery.Location = new System.Drawing.Point(6, 6);
+            this.TCustomQuery.Multiline = true;
+            this.TCustomQuery.Name = "TCustomQuery";
+            this.TCustomQuery.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.TCustomQuery.Size = new System.Drawing.Size(846, 226);
+            this.TCustomQuery.TabIndex = 0;
+            this.TCustomQuery.WordWrap = false;
             // 
             // TPExecProc
             // 
@@ -942,8 +944,6 @@
             this.TPTable.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.TPQuery.ResumeLayout(false);
-            this.TPQuery.PerformLayout();
             this.TPColumn.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -955,6 +955,8 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.TPQuery.ResumeLayout(false);
+            this.TPQuery.PerformLayout();
             this.TPDebug.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -985,7 +987,6 @@
         private System.Windows.Forms.RichTextBox RTDebug;
         private System.Windows.Forms.TabPage TPGenerate;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.RichTextBox RTEditTemplate;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.RichTextBox RTGeneratedCode;
         private System.Windows.Forms.Label label7;
@@ -1035,6 +1036,7 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TabPage TPExecProc;
         private System.Windows.Forms.Button BtnShowHidePassword;
+        private System.Windows.Forms.TextBox TEditTemplate;
     }
 }
 

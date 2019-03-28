@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using UtilityClasses;
@@ -41,6 +42,7 @@ namespace CodeStencil
         private List<string> CodeTemplate;
         private string CommaDelimitedFieldNames;
         private int? CurrentCodeTemplateIndex;
+        private string CurrentCodeTemplateName;
         private string CurrentDatabase;
         private string CurrentTable;
         private string CurrentTableSchema;
@@ -56,6 +58,7 @@ namespace CodeStencil
         private List<string> IncludePaths;
         private bool Initialising;
         private int? PreviousCodeTemplateIndex;
+        private string PreviousCodeTemplateName;
         private bool ServerCannotSwitchDatabases;
         private bool TemplateChangeReversed;
         private bool TemplateLoaded;
@@ -492,10 +495,17 @@ namespace CodeStencil
             SaveTemplate();
         }
 
-        private void SaveTemplate()
+        private void SaveTemplate(string templateName = "")
         {
             string TemplateName, TemplateFileName;
-            TemplateName = CBCodeTemplate.Text;
+            if (!string.IsNullOrEmpty(templateName))
+            {
+                TemplateName = templateName;
+            }
+            else
+            {
+                TemplateName = CBCodeTemplate.Text;
+            }
 
             if (string.IsNullOrEmpty(TemplateName))
             {
@@ -514,14 +524,15 @@ namespace CodeStencil
                     MessageBoxButtons.YesNo);
                 if (confirmResult == DialogResult.Yes)
                 {
-                    File.WriteAllText(TemplateFileName, RTEditTemplate.Text);
+                    FileHelper.MakeBackup(TemplateFileName, 10);
+                    File.WriteAllText(TemplateFileName, TEditTemplate.Text, Encoding.UTF8);
                     TemplateLoaded =
                         true; // We now have a valid template and we want to track changes, even if no template was loaded until now.
                 }
             }
             else
             {
-                File.WriteAllText(TemplateFileName, RTEditTemplate.Text);
+                File.WriteAllText(TemplateFileName, TEditTemplate.Text, Encoding.UTF8);
                 TemplateLoaded =
                     true; // We now have a valid template and we want to track changes, even if no template was loaded until now.
                 PopulateCodeTemplates();
@@ -562,46 +573,57 @@ namespace CodeStencil
 
         private void CBCodeTemplate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            bool ProceedWithChange = false;
+            // If we just programmatically changed the selected index back to the previous one, don't do anything further.
+            if (TemplateChangeReversed)
+            {
+                TemplateChangeReversed = false;
+                return;
+            }
+
+            CurrentCodeTemplateIndex = CBCodeTemplate.SelectedIndex;
+            CurrentCodeTemplateName = CBCodeTemplate.Text;
+
+            bool LoadNewTemplate = true;
+            bool SaveChanges = false;
+
             if (TemplateLoaded)
             {
-                if (!TemplateChangeReversed)
+                if (ChangesMadeSinceLastSave)
                 {
-                    if (ChangesMadeSinceLastSave)
+                    DialogResult confirmResult = MessageBox.Show(
+                        "You have made changes to the code template. Do you want to save the changes first? "
+                        + "Select Yes to save changes then load the selected template. Select No to discard your changes and load the "
+                        + "selected template. Select cancel to stay on the current template.",
+                        "Confirm Save Changes",
+                        MessageBoxButtons.YesNoCancel);
+                    switch (confirmResult)
                     {
-                        DialogResult confirmResult = MessageBox.Show(
-                            "You have made changes to the code template. Are you sure you want to discard them and load another template?",
-                            "Confirm Load Without Saving",
-                            MessageBoxButtons.YesNo);
-                        if (confirmResult != DialogResult.Yes)
-                        {
-                            TemplateChangeReversed = true;
-                            if (PreviousCodeTemplateIndex != null)
-                                CBCodeTemplate.SelectedIndex = PreviousCodeTemplateIndex.GetValueOrDefault();
-                            TemplateChangeReversed = false;
-                        }
-                        else
-                        {
-                            ProceedWithChange = true;
-                        }
-                    }
-                    else
-                    {
-                        ProceedWithChange = true;
+                        case DialogResult.Yes:
+                            SaveChanges = true;
+                            break;
+                        case DialogResult.No:
+                            break;
+                        case DialogResult.Cancel:
+                            LoadNewTemplate = false;
+                            break;
                     }
                 }
             }
-            else
+
+            if (SaveChanges)
             {
-                ProceedWithChange = true;
+                SaveTemplate(PreviousCodeTemplateName);
             }
 
-            if (ProceedWithChange)
+            if (LoadNewTemplate)
             {
-                PreviousCodeTemplateIndex = CurrentCodeTemplateIndex;
-                CurrentCodeTemplateIndex = CBCodeTemplate.SelectedIndex;
-                TemplateChangeReversed = false;
                 LoadTemplate();
+            }
+            else
+            {
+                TemplateChangeReversed = true;
+                if (PreviousCodeTemplateIndex != null)
+                    CBCodeTemplate.SelectedIndex = PreviousCodeTemplateIndex.GetValueOrDefault();
             }
         }
 
@@ -619,7 +641,15 @@ namespace CodeStencil
             {
                 CodeTemplate.Clear();
                 IncludePaths.Clear();
-                RTEditTemplate.Text = File.ReadAllText(TemplateFileName);
+
+                string sTemplate = File.ReadAllText(TemplateFileName);
+                // Convert Unix line endings to Windows ones, if found
+                if (sTemplate.Contains("\n") && !sTemplate.Contains("\r\n"))
+                {
+                    sTemplate = sTemplate.Replace("\n", "\r\n");
+                }
+
+                TEditTemplate.Text = sTemplate;
                 TemplateLoaded = true;
                 ChangesMadeSinceLastSave = false;
                 if (!Initialising)
@@ -702,11 +732,6 @@ namespace CodeStencil
             PopulateDatabaseConnections();
         }
 
-        private void RTEditTemplate_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (TemplateLoaded) ChangesMadeSinceLastSave = true;
-        }
-
         private void BtnDeleteTemplate_Click(object sender, EventArgs e)
         {
             if (CBCodeTemplate.SelectedIndex == -1)
@@ -730,7 +755,7 @@ namespace CodeStencil
                 if (confirmResult == DialogResult.Yes)
                 {
                     File.Delete(TemplateFileName);
-                    RTEditTemplate.Clear();
+                    TEditTemplate.Clear();
                     PopulateCodeTemplates();
                 }
             }
@@ -760,9 +785,9 @@ namespace CodeStencil
             //{
             //    if (string.IsNullOrEmpty(CodeTemplate.ToString()))
             //    {
-            //        if (!string.IsNullOrEmpty(RTEditTemplate.ToString()))
+            //        if (!string.IsNullOrEmpty(TEditTemplate.ToString()))
             //        {
-            //            CodeTemplate.AddRange(RTEditTemplate.Lines);
+            //            CodeTemplate.AddRange(TEditTemplate.Lines);
             //        }
             //        else
             //        {
@@ -774,7 +799,7 @@ namespace CodeStencil
             //}
 
             // Initialise in-memory code template by copying the text from the window.
-            CodeTemplate.AddRange(RTEditTemplate.Lines);
+            CodeTemplate.AddRange(TEditTemplate.Lines);
         }
 
         private void GenerateCode()
@@ -1042,12 +1067,12 @@ namespace CodeStencil
         {
             int iCount = 0;
 
-            for (int iNLR = StartLine; iNLR < RTEditTemplate.Lines.Count(); iNLR++)
+            for (int iNLR = StartLine; iNLR < TEditTemplate.Lines.Count(); iNLR++)
             {
-                if (RTEditTemplate.Lines[iNLR].Length == 0) break;
+                if (TEditTemplate.Lines[iNLR].Length == 0) break;
 
-                if (RTEditTemplate.Lines[iNLR].Substring(0, 1) == BlockRepeatSubsequentLines ||
-                    RTEditTemplate.Lines[iNLR].Substring(0, 1) == BlockRepeatFirstLine)
+                if (TEditTemplate.Lines[iNLR].Substring(0, 1) == BlockRepeatSubsequentLines ||
+                    TEditTemplate.Lines[iNLR].Substring(0, 1) == BlockRepeatFirstLine)
                     iCount = iCount + 1;
                 else
                     break;
@@ -1131,7 +1156,7 @@ namespace CodeStencil
         /// <remarks>If some lines are repeating and some not, all will be made repeating.</remarks>
         private void ToggleRepeatingLines()
         {
-            string SelectedText = RTEditTemplate.SelectedText;
+            string SelectedText = TEditTemplate.SelectedText;
 
             // Check whether some lines in the selected text are already repeating lines
             if (AllLinesRepeat(SelectedText))
@@ -1139,7 +1164,7 @@ namespace CodeStencil
             else
                 SelectedText = AddRepeatingLines(SelectedText);
 
-            RTEditTemplate.SelectedText = SelectedText;
+            TEditTemplate.SelectedText = SelectedText;
         }
 
         private bool StringContains(string StrToSearch, string RegExPattern)
@@ -1240,7 +1265,7 @@ namespace CodeStencil
 
             InsertMacro = re.Replace(SelectedMacro, ReplaceWith);
 
-            RTEditTemplate.SelectedText = RTEditTemplate.SelectedText + InsertMacro;
+            TEditTemplate.SelectedText = TEditTemplate.SelectedText + InsertMacro;
         }
 
         private void BtnInsertMacro_Click(object sender, EventArgs e)
@@ -1449,6 +1474,17 @@ namespace CodeStencil
             }
 
             return dbconn;
+        }
+
+        private void TEditTemplate_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (TemplateLoaded) ChangesMadeSinceLastSave = true;
+        }
+
+        private void CBCodeTemplate_Enter(object sender, EventArgs e)
+        {
+            PreviousCodeTemplateIndex = CBCodeTemplate.SelectedIndex;
+            CurrentCodeTemplateIndex = CBCodeTemplate.SelectedIndex;
         }
     }
 
