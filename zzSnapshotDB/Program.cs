@@ -92,7 +92,7 @@ namespace zzSnapshotDB
             string ObjectListFilePath = Path.Combine(SnapshotFolder, ObjectListFileName);
             File.WriteAllText(ObjectListFilePath, ObjectList);
 
-
+            Console.WriteLine("\r\n\r\nFinished. Press a key to exit the progam.");
             Console.ReadKey();
         }
 
