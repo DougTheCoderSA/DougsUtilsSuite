@@ -7,18 +7,11 @@ namespace CodeStencil
 {
     /// <summary>
     /// Class to keep specified number of previous versions of an overwritten file.
-    /// <example>For example:
-    /// <code>
-    ///    FileHelper.MakeBackup("web.config", 5);
-    /// </code>
-    /// The first time you called it, you would get web.config.20140314_01. The next time would get web.config.20140314_02.
-    /// When web.config.14031406 was created, web.config.14031401 would be deleted to keep the number of backups limited to 5.
-    /// </example>
     /// </summary>
     public static class FileHelper
     {
         /// <summary>
-        /// Make a numbered backup copy of the specified files.  Backup files have the name filename.exe.yymmdd##, where yymmdd is the date and ## is a zero justified sequence number starting at 1
+        /// Make a numbered backup copy of the specified files.  Backup files have the name filename.ext.yyyymmdd_##, where yyyymmdd is the date and ## is a zero justified sequence number starting at 1
         /// </summary>
         /// <param name="fileName">Name of the file to backup.</param>
         /// <param name="maxBackups">The maximum backups to keep.</param>
@@ -60,7 +53,7 @@ namespace CodeStencil
                 }
 
                 // Create the file name for the newest back up file.
-                var latestBackup = String.Format("{0}.{1:yyyyMMdd}_{2:00}", fileName, DateTime.Now, newSequence);
+                var latestBackup = $"{fileName}.{DateTime.Now:yyyyMMdd}_{newSequence:00}";
 
                 // Copy the current file to the new backup name and overwrite any existing copy
                 File.Copy(fileName, latestBackup, true);
